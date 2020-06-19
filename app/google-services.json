@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1008755932568",
+    "firebase_url": "https://clip-31ba6.firebaseio.com",
+    "project_id": "clip-31ba6",
+    "storage_bucket": "clip-31ba6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008755932568:android:fddcc0d3f715f622bf3fed",
+        "android_client_info": {
+          "package_name": "com.informatica.tutorialfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008755932568-n3f41v243en83g4d7bctdk85h4re4tof.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ-TMASanvVTBRK5evrSxki6P5zLGD5Wk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008755932568-n3f41v243en83g4d7bctdk85h4re4tof.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
