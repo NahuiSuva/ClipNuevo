@@ -51,9 +51,6 @@ public class AgregarEditar extends AppCompatActivity {
     Boolean lluvia;
     ArrayList<Recurso> complementosSeleccionados;
     ArrayList<Tag> tagsSeleccionados;
-
-
-
     Bundle paqueteRecibido;
     String IdUsuario = "";
     ArrayList<Recurso> ListaDeRecursos;
@@ -106,7 +103,6 @@ public class AgregarEditar extends AppCompatActivity {
         tagsSeleccionados=new ArrayList<Tag>();
         tagsSeleccionados.clear();
         Tag miTag = new Tag();
-
         miTag.setNombre("nada");
         tagsSeleccionados.add(miTag);
         paqueteRecibido = getIntent().getExtras();
