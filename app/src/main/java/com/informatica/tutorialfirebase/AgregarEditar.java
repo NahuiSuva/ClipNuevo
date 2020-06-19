@@ -52,6 +52,8 @@ public class AgregarEditar extends AppCompatActivity {
     ArrayList<Recurso> complementosSeleccionados;
     ArrayList<Tag> tagsSeleccionados;
 
+
+
     Bundle paqueteRecibido;
     String IdUsuario = "";
     ArrayList<Recurso> ListaDeRecursos;
