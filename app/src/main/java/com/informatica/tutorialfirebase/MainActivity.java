@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     Bundle paqueteRecibido;
     Usuario User;
 
-    //Esto es el push
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
