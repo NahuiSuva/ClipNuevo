@@ -1,5 +1,6 @@
 package com.informatica.tutorialfirebase;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -56,6 +57,9 @@ public class AgregarEditar extends AppCompatActivity {
     ArrayList<Recurso> ListaDeRecursos;
     ArrayList<Tag> ListaDeTags;
 
+    Button abrirFecha;
+    Button abrirHora;
+
     @BindView(R.id.lblTitulo)
     TextView lblTitulo;
     @BindView(R.id.btnAgregar)
@@ -92,6 +96,9 @@ public class AgregarEditar extends AppCompatActivity {
         ButterKnife.bind(this);
         //Obtengo la instancia de la base de datos
         db = FirebaseFirestore.getInstance();
+
+        abrirFecha = findViewById(R.id.btnFecha);
+        abrirHora = findViewById(R.id.btnHora);
 
         complementos=new ArrayList<String>();
         tags=new ArrayList<String>();
@@ -220,6 +227,28 @@ public class AgregarEditar extends AppCompatActivity {
                 }
             });
     }
+
+
+    public void mostrarFecha(View vista){
+    if(dpFecha.getVisibility()==View.VISIBLE){
+        dpFecha.setVisibility(View.GONE);
+        abrirFecha.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fecha_24dp, 0, R.drawable.ic_expand_more_24dp, 0);
+    }else{
+        dpFecha.setVisibility(View.VISIBLE);
+        abrirFecha.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fecha_24dp, 0, R.drawable.ic_expand_less_24dp, 0);
+    }
+    }
+
+    public void mostrarHora(View vista){
+        if(tpHora.getVisibility()==View.VISIBLE){
+            tpHora.setVisibility(View.GONE);
+            abrirHora.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hora_24dp, 0, R.drawable.ic_expand_more_24dp, 0);
+        }else{
+            tpHora.setVisibility(View.VISIBLE);
+            abrirHora.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_hora_24dp, 0, R.drawable.ic_expand_less_24dp, 0);
+        }
+    }
+
     public void btnEliminar(View v) {
     AlertDialog confirmacion = new AlertDialog.Builder(AgregarEditar.this)
         .setTitle("Eliminar Evento")

@@ -4,30 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".LoginActivity"
+    android:background="@color/colorPrimary">
 
+    <TextView
+        android:id="@+id/textoBienvenidos"
+        android:textColor="@color/colorWhite"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Te damos la bienvenida a Clip"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/Logo"
+        android:layout_marginTop="10dp"/>
 
     <ImageView
         android:id="@+id/Logo"
+        android:layout_width="140dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/logo"
+        android:background="@drawable/circle_white"
+        android:padding="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/textoRequisito"
+        android:textColor="@color/colorBlack"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher_foreground"
+        android:text="Para usar la aplicación es requisito ingresar con su cuenta de google"
+        android:textSize="15dp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.433" />
+        android:layout_marginBottom="30dp"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Logo" />
+        app:layout_constraintBottom_toTopOf="@id/textoRequisito"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
