@@ -19,7 +19,6 @@
             android:name=".MainActivity"
             android:label="Clip"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
     </application>
 

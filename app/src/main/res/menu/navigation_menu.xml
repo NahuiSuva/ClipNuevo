@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/ItemCalendario"
+        android:icon="@drawable/ic_fecha_24dp"
+        android:title="Calendario"/>
+    <item android:id="@+id/ItemListaDefinida"
+        android:icon="@drawable/ic_lista_definida_24dp"
+        android:title="Lista definida"/>
+    <item android:id="@+id/ItemListaIndefinida"
+        android:icon="@drawable/ic_indefinido_24dp"
+        android:title="Lista indefinida"/>
+    <item android:id="@+id/ItemTags"
+        android:icon="@drawable/ic_tag_24dp"
+        android:title="Tags"/>
+    <item android:id="@+id/ItemComplementos"
+        android:icon="@drawable/ic_complemento_24dp"
+        android:title="Complementos"/>
+    <item android:id="@+id/ItemSuenio"
+        android:icon="@drawable/ic_suenio_24dp"
+        android:title="Tiempo de sueño"/>
+    <item android:id="@+id/ItemEvolucion"
+        android:icon="@drawable/ic_evolucion_24dp"
+        android:title="Evolucion"/>
+</menu>

@@ -7,12 +7,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.sql.Time;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,6 +62,7 @@ public class AgregarEditar extends AppCompatActivity {
 
     Button abrirFecha;
     Button abrirHora;
+    Button abrirDuracion;
 
     @BindView(R.id.lblTitulo)
     TextView lblTitulo;
@@ -71,7 +75,7 @@ public class AgregarEditar extends AppCompatActivity {
     @BindView(R.id.txtFecha)
     DatePicker dpFecha;
     @BindView(R.id.txtDuracion)
-    EditText edtDuracion;
+    TimePicker tpDuracion;
     @BindView(R.id.txtHora)
     TimePicker tpHora;
     @BindView(R.id.rdImportancia)
@@ -84,6 +88,8 @@ public class AgregarEditar extends AppCompatActivity {
     RadioButton rd3;
     @BindView(R.id.swLluvia)
     Switch swLluvia;
+    @BindView(R.id.swIndefinido)
+    Switch swIndefinido;
 
     int cont = 0;
 
@@ -93,12 +99,43 @@ public class AgregarEditar extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agregar_editar);
+        getSupportActionBar().hide();
         ButterKnife.bind(this);
         //Obtengo la instancia de la base de datos
         db = FirebaseFirestore.getInstance();
 
         abrirFecha = findViewById(R.id.btnFecha);
         abrirHora = findViewById(R.id.btnHora);
+        abrirDuracion = findViewById(R.id.btnDuracion);
+
+        swIndefinido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(swIndefinido.isChecked()){
+                    abrirHora.setEnabled(false);
+                    abrirHora.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                    abrirFecha.setEnabled(false);
+                    abrirFecha.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                    tpHora.setEnabled(false);
+                    dpFecha.setEnabled(false);
+                }else {
+                    abrirHora.setEnabled(true);
+                    abrirHora.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                    abrirFecha.setEnabled(true);
+                    abrirFecha.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                    tpHora.setEnabled(true);
+                    dpFecha.setEnabled(true);
+                }
+            }
+        });
+
+        tpDuracion.setIs24HourView(true);
+        tpDuracion.setHour(1);
+        tpDuracion.setMinute(0);
 
         complementos=new ArrayList<String>();
         tags=new ArrayList<String>();
@@ -127,7 +164,9 @@ public class AgregarEditar extends AppCompatActivity {
             id = bundle.getString("id");
             edtTitulo.setText(bundle.getString("titulo"));
             dpFecha.setFirstDayOfWeek(1);
-            edtDuracion.setText(String.valueOf(bundle.getInt("duracion")));
+            tpDuracion.setMinute(bundle.getInt("minutos"));
+            tpDuracion.setHour(bundle.getInt("horas"));
+            //edtDuracion.setText(String.valueOf(bundle.getInt("duracion")));
             tpHora.setMinute(bundle.getInt("minutos"));
             tpHora.setHour(bundle.getInt("horas"));
             rdImportancia.check(bundle.getInt("importancia"));
@@ -163,14 +202,17 @@ public class AgregarEditar extends AppCompatActivity {
                         int day = dpFecha.getDayOfMonth();
                         fecha = day + "/" + (month + 1) + "/" + year;
 
-                        if (edtDuracion.length() == 0) {
+                        int minutoDuracion = tpDuracion.getMinute();
+                        int horaDuracion =  tpDuracion.getHour();
+                        duracion = (horaDuracion * 60) + minutoDuracion;
+                        /*if (edtDuracion.length() == 0) {
                             if (cantAdv == 0) {
                                 Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             duracion = Integer.parseInt(edtDuracion.getText().toString());
                             cont++;
-                        }
+                        }*/
 
                         int minuto = tpHora.getMinute();
                         int hora1 = tpHora.getHour();
@@ -211,7 +253,7 @@ public class AgregarEditar extends AppCompatActivity {
                         }
 
                         lluvia = swLluvia.getShowText();
-                        if (cont == 3) {
+                        if (cont == 2) {
                             //Si no tengo un ID quiere decir que es un registro nuevo. Si tengo un ID debo actualizar el existente
                             if (id.length() > 0) {
                                 ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia);
@@ -237,6 +279,16 @@ public class AgregarEditar extends AppCompatActivity {
         dpFecha.setVisibility(View.VISIBLE);
         abrirFecha.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_fecha_24dp, 0, R.drawable.ic_expand_less_24dp, 0);
     }
+    }
+
+    public void mostrarDuracion(View vista){
+        if(tpDuracion.getVisibility()==View.VISIBLE){
+            tpDuracion.setVisibility(View.GONE);
+            abrirDuracion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_duracion_24dp, 0, R.drawable.ic_expand_more_24dp, 0);
+        }else{
+            tpDuracion.setVisibility(View.VISIBLE);
+            abrirDuracion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_duracion_24dp, 0, R.drawable.ic_expand_less_24dp, 0);
+        }
     }
 
     public void mostrarHora(View vista){
@@ -364,7 +416,7 @@ public class AgregarEditar extends AppCompatActivity {
         }
         mensaje.setMultiChoiceItems(opciones, opcionesPreSeleccionadas, escuchadorOpciones);
         mensaje.setPositiveButton("Aceptar", escuchador);
-        mensaje.setIcon(R.drawable.ic_launcher_foreground);
+        mensaje.setIcon(R.drawable.ic_complemento_24dp);
         mensaje.create();
         mensaje.show();
     }
@@ -404,7 +456,7 @@ public class AgregarEditar extends AppCompatActivity {
         }
         mensaje.setMultiChoiceItems(opciones, opcionesPreSeleccionadas, escuchadorOpciones);
         mensaje.setPositiveButton("Aceptar", escuchador);
-        mensaje.setIcon(R.drawable.ic_launcher_foreground);
+        mensaje.setIcon(R.drawable.ic_tag_24dp);
         mensaje.create();
         mensaje.show();
     }
