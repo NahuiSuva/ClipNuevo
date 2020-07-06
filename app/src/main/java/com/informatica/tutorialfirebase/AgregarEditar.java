@@ -2,6 +2,7 @@ package com.informatica.tutorialfirebase;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -29,7 +31,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.sql.Time;
 import java.time.Duration;
@@ -53,12 +59,17 @@ public class AgregarEditar extends AppCompatActivity {
     ArrayList<String> complementos;
     ArrayList<String> tags;
     Boolean lluvia;
+    Boolean indefinido;
+    Boolean completado;
     ArrayList<Recurso> complementosSeleccionados;
     ArrayList<Tag> tagsSeleccionados;
-    Bundle paqueteRecibido;
+    Bundle paqueteRecibidoMain;
+    Bundle paqueteRecibidoAdapter;
     String IdUsuario = "";
     ArrayList<Recurso> ListaDeRecursos;
     ArrayList<Tag> ListaDeTags;
+    ArrayList<String> ListaRecursosTraidos;
+    ArrayList<String> ListaTagsTraidos;
 
     Button abrirFecha;
     Button abrirHora;
@@ -149,30 +160,72 @@ public class AgregarEditar extends AppCompatActivity {
         Tag miTag = new Tag();
         miTag.setNombre("nada");
         tagsSeleccionados.add(miTag);
-        paqueteRecibido = getIntent().getExtras();
-        IdUsuario = paqueteRecibido.getString("IdUsuario");
-        ListaDeRecursos=new ArrayList<Recurso>();
-        ListaDeRecursos= (ArrayList<Recurso>) paqueteRecibido.getSerializable("ListaRecursos");
-        ListaDeTags= (ArrayList<Tag>) paqueteRecibido.getSerializable("ListaTags");
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle.getInt("IndicadorActivity") == 1) {
+            paqueteRecibidoMain = getIntent().getExtras();
+            IdUsuario = paqueteRecibidoMain.getString("IdUsuario");
+
+            ListaDeRecursos=new ArrayList<Recurso>();
+            ListaDeRecursos= (ArrayList<Recurso>) paqueteRecibidoMain.getSerializable("ListaRecursos");
+
+            ListaDeTags=new ArrayList<Tag>();
+            ListaDeTags= (ArrayList<Tag>) paqueteRecibidoMain.getSerializable("ListaTags");
+        }
+        else if(bundle.getInt("IndicadorActivity") == 2)
+        {
+            paqueteRecibidoAdapter = getIntent().getExtras();
+
+            ListaDeRecursos=new ArrayList<Recurso>();
+            ListaDeRecursos= (ArrayList<Recurso>) paqueteRecibidoAdapter.getSerializable("ListaRecursos");
+
+            ListaDeTags=new ArrayList<Tag>();
+            ListaDeTags= (ArrayList<Tag>) paqueteRecibidoAdapter.getSerializable("ListaTags");
+
+            paqueteRecibidoMain = getIntent().getExtras();
+            IdUsuario = paqueteRecibidoAdapter.getString("IdUsuario");
+        }
+
+
+
         //Compruebo si llegaron datos a esta activity.
         // Si llegaron voy a mostrar la pantalla de Editar. Si no llegaron muestro la de crear
-        Bundle bundle = getIntent().getExtras();
-        if (paqueteRecibido.getInt("Cant") != 2) {
+
+        if (bundle.getInt("Cant") != 2) {
             lblTitulo.setText("Modificar Evento");
             btnAgregar.setText("EDITAR");
 
             id = bundle.getString("id");
             edtTitulo.setText(bundle.getString("titulo"));
-            dpFecha.setFirstDayOfWeek(1);
+            int Inicio = bundle.getString("fecha").indexOf("/");
+            int Fin = bundle.getString("fecha").indexOf("/", Inicio + 1);
+            int dia = Integer.parseInt(bundle.getString("fecha").substring(0, Inicio));
+            int mes = Integer.parseInt(bundle.getString("fecha").substring(Inicio+1, Fin));
+            int anio = Integer.parseInt(bundle.getString("fecha").substring(Fin+1, Fin+5));
+            dpFecha.updateDate(anio, mes, dia);
             tpDuracion.setMinute(bundle.getInt("minutos"));
             tpDuracion.setHour(bundle.getInt("horas"));
-            //edtDuracion.setText(String.valueOf(bundle.getInt("duracion")));
-            tpHora.setMinute(bundle.getInt("minutos"));
-            tpHora.setHour(bundle.getInt("horas"));
-            rdImportancia.check(bundle.getInt("importancia"));
+            int InicioHora = bundle.getString("hora").indexOf(":");
+            tpHora.setHour(Integer.parseInt(bundle.getString("hora").substring(0, InicioHora)));
+            tpHora.setMinute(Integer.parseInt(bundle.getString("hora").substring(InicioHora+1)));
+            double duracion = (bundle.getInt("duracion")/60);
+            int InicioDuracion = String.valueOf(duracion).indexOf(".");
+            tpDuracion.setHour(Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion)));
+            tpDuracion.setMinute(bundle.getInt("duracion")-((Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion)))*60));
+            if(bundle.getInt("importancia") == 1) {
+                rd1.setChecked(true);
+            }
+            else if(bundle.getInt("importancia") == 2) {
+                rd2.setChecked(true);
+            }
+            else{
+                rd3.setChecked(true);
+            }
+
             //edtComplementos.setText(bundle.getString("complementos"));
             //edtTags.setText(bundle.getString("tags"));
             swLluvia.setChecked(bundle.getBoolean("lluvia"));
+            swIndefinido.setChecked(bundle.getBoolean("indefinido"));
 
             btnEliminar.setVisibility(View.VISIBLE);
         } else {
@@ -205,15 +258,6 @@ public class AgregarEditar extends AppCompatActivity {
                         int minutoDuracion = tpDuracion.getMinute();
                         int horaDuracion =  tpDuracion.getHour();
                         duracion = (horaDuracion * 60) + minutoDuracion;
-                        /*if (edtDuracion.length() == 0) {
-                            if (cantAdv == 0) {
-                                Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            duracion = Integer.parseInt(edtDuracion.getText().toString());
-                            cont++;
-                        }*/
-
                         int minuto = tpHora.getMinute();
                         int hora1 = tpHora.getHour();
                         hora = hora1 + ":" + minuto;
@@ -252,13 +296,15 @@ public class AgregarEditar extends AppCompatActivity {
                             }
                         }
 
-                        lluvia = swLluvia.getShowText();
+                        lluvia = swLluvia.isChecked();
+                        indefinido = swIndefinido.isChecked();
+                        completado = false;
                         if (cont == 2) {
                             //Si no tengo un ID quiere decir que es un registro nuevo. Si tengo un ID debo actualizar el existente
                             if (id.length() > 0) {
-                                ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia);
+                                ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado);
                             } else {
-                                AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia);
+                                AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado);
 
                             }
                             complementosSeleccionados.clear();
@@ -267,6 +313,8 @@ public class AgregarEditar extends AppCompatActivity {
                             finish();
                         }
                 }
+
+
             });
     }
 
@@ -321,8 +369,9 @@ public class AgregarEditar extends AppCompatActivity {
         .show();
 
     }
-    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia) {
-        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia)).toMap();
+
+    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
+        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado)).toMap();
 
         db.collection("usuarios")
                 .document(IdUsuario)
@@ -344,8 +393,8 @@ public class AgregarEditar extends AppCompatActivity {
                 });
     }
 
-    private void AgregarEvento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia) {
-        Map<String, Object> evento = new Evento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia).toMap();
+    private void AgregarEvento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
+        Map<String, Object> evento = new Evento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado).toMap();
 
         db.collection("usuarios")
                 .document(IdUsuario)
@@ -381,8 +430,7 @@ public class AgregarEditar extends AppCompatActivity {
                 });
     }
 
-    public void mostrarComplementos(View vista)
-    {
+    public void mostrarComplementos(View vista) {
         complementosSeleccionados.clear();
         DialogInterface.OnClickListener escuchador = new DialogInterface.OnClickListener() {
             @Override
@@ -401,6 +449,7 @@ public class AgregarEditar extends AppCompatActivity {
             }
         };
 
+
         AlertDialog.Builder mensaje;
         mensaje = new AlertDialog.Builder(this);
         mensaje.setTitle("Complementos");
@@ -414,15 +463,30 @@ public class AgregarEditar extends AppCompatActivity {
         {
             opcionesPreSeleccionadas[i] = false;
         }
-        mensaje.setMultiChoiceItems(opciones, opcionesPreSeleccionadas, escuchadorOpciones);
-        mensaje.setPositiveButton("Aceptar", escuchador);
-        mensaje.setIcon(R.drawable.ic_complemento_24dp);
-        mensaje.create();
-        mensaje.show();
+
+        if(getIntent().getExtras().getInt("IndicadorActivity") == 2) {
+            ListaRecursosTraidos = new ArrayList<String>();
+            ListaRecursosTraidos = (ArrayList<String>) paqueteRecibidoAdapter.getSerializable("complementos");
+            for (int i = 0; i < ListaRecursosTraidos.size(); i++) {
+                for (int z = 0; z < ListaDeRecursos.size(); z++) {
+                    String NombreRecurso = ListaDeRecursos.get(z).getNombre();
+                    if (NombreRecurso.equals(ListaRecursosTraidos.get(i))) {
+                        opcionesPreSeleccionadas[z] = true;
+                    }
+
+                }
+            }
+        }
+
+            mensaje.setMultiChoiceItems(opciones, opcionesPreSeleccionadas, escuchadorOpciones);
+            mensaje.setPositiveButton("Aceptar", escuchador);
+            mensaje.setIcon(R.drawable.ic_complemento_24dp);
+            mensaje.create();
+            mensaje.show();
+
     }
 
-    public void mostrarTags(View vista)
-    {
+    public void mostrarTags(View vista) {
         tagsSeleccionados.clear();
         DialogInterface.OnClickListener escuchador = new DialogInterface.OnClickListener() {
             @Override
@@ -454,11 +518,27 @@ public class AgregarEditar extends AppCompatActivity {
         {
             opcionesPreSeleccionadas[i] = false;
         }
+
+        if(getIntent().getExtras().getInt("IndicadorActivity") == 2) {
+            ListaTagsTraidos = new ArrayList<String>();
+            ListaTagsTraidos = (ArrayList<String>) paqueteRecibidoAdapter.getSerializable("tags");
+            for (int i = 0; i < ListaTagsTraidos.size(); i++) {
+                for (int z = 0; z < ListaDeRecursos.size(); z++) {
+                    String NombreRecurso = ListaDeRecursos.get(z).getNombre();
+                    if (NombreRecurso.equals(ListaTagsTraidos.get(i))) {
+                        opcionesPreSeleccionadas[z] = true;
+                    }
+
+                }
+            }
+        }
+
         mensaje.setMultiChoiceItems(opciones, opcionesPreSeleccionadas, escuchadorOpciones);
         mensaje.setPositiveButton("Aceptar", escuchador);
         mensaje.setIcon(R.drawable.ic_tag_24dp);
         mensaje.create();
         mensaje.show();
     }
+
 }
 

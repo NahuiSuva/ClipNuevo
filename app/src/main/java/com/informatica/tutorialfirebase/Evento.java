@@ -1,10 +1,11 @@
 package com.informatica.tutorialfirebase;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Evento {
+public class Evento implements Serializable {
     private String id;
     private String titulo;
     private String fecha;
@@ -14,6 +15,8 @@ public class Evento {
     private ArrayList<String> complementos;
     private ArrayList<String> tags;
     private Boolean lluvia;
+    private Boolean indefinido;
+    private Boolean completado;
 
     // En caso de tener foto, podés utilizar este constructor
     /*public Alumno(String nombre, String division, int calificacion, String foto) {
@@ -25,7 +28,7 @@ public class Evento {
     public Evento(){}
 
 
-    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia) {
+    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
         this.id=id;
         this.titulo=titulo;
         this.fecha=fecha;
@@ -35,8 +38,10 @@ public class Evento {
         this.complementos=complementos;
         this.tags=tags;
         this.lluvia=lluvia;
+        this.indefinido=indefinido;
+        this.completado = completado;
     }
-    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia) {
+    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
         this.titulo=titulo;
         this.fecha=fecha;
         this.duracion=duracion;
@@ -45,6 +50,8 @@ public class Evento {
         this.complementos=complementos;
         this.tags=tags;
         this.lluvia=lluvia;
+        this.indefinido=indefinido;
+        this.completado = completado;
     }
 
     public String getId(){return  id;}
@@ -96,7 +103,7 @@ public class Evento {
     }
 
     public void setComplementos(ArrayList<String>  complementos) {
-        this.duracion = duracion;
+        this.complementos = complementos;
     }
 
     public ArrayList<String> getTags() {
@@ -112,9 +119,24 @@ public class Evento {
     }
 
     public void setLluvia(Boolean lluvia) {
-        this.duracion = duracion;
+        this.lluvia = lluvia;
     }
 
+    public Boolean getIndefinido() {
+        return indefinido;
+    }
+
+    public void setIndefinido(Boolean indefinido) {
+        this.indefinido = indefinido;
+    }
+
+    public Boolean getCompletado() {
+        return completado;
+    }
+
+    public void setCompletado(Boolean completado) {
+        this.completado = completado;
+    }
 
     public Map<String, Object> toMap() {
 
@@ -127,6 +149,8 @@ public class Evento {
         result.put("Complementos", this.complementos);
         result.put("Tags", this.tags);
         result.put("Lluvia", this.lluvia);
+        result.put("Indefinido", this.indefinido);
+        result.put("Completado", this.completado);
 
         return result;
     }

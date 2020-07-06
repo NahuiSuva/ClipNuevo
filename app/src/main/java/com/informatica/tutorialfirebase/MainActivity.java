@@ -1,7 +1,7 @@
 package com.informatica.tutorialfirebase;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,10 +12,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
@@ -24,44 +22,54 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.net.URL;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.lista_eventos)
+    //@BindView(R.id.lista_eventos)
     RecyclerView ListaEventos;
     RecyclerView ListaUsuarios;
     private ArrayList<Recurso> ListaRecursos;
     private ArrayList<Tag> ListaTags;
     private ArrayList<String> complementosSeleccionados;
+    private ArrayList<Evento> ListaEventosFrag;
     private FirebaseFirestore db;
     LinearLayoutManager linearLayoutManager;
     private EventoAdapter mAdapter;
     private UsuarioAdapter uAdapter;
     Bundle paqueteRecibido;
     Usuario User;
+    int Cant = 0;
+    private ArrayList<Evento> _listaEventos;
+    int indicadorActivity = 1;
+
+    FragmentManager AdminFragments;
+    FragmentTransaction TransaccionesDeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AdminFragments=getFragmentManager();
+
+        MostrarCalendario();
+
+        ListaEventosFrag = new ArrayList<Evento>();
 
         Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar1);
@@ -86,6 +94,18 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 Toast.makeText(getApplicationContext(), menuItem.getTitle() + " seleccionado", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawers();
+                if(menuItem.getTitle().equals("Lista definida"))
+                {
+                    SeIngresoElDatoDefinido(ListaEventosFrag);
+                }
+                else if(menuItem.getTitle().equals("Lista indefinida"))
+                {
+                    SeIngresoElDatoIndefinido(ListaEventosFrag);
+                }
+                else if(menuItem.getTitle().equals("Calendario"))
+                {
+                    MostrarCalendario();
+                }
                 return true;
             }
         });
@@ -108,11 +128,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Redirigo hacia la pantalla para agregar un nuevo evento
+                Cant = 2;
                 Bundle bundle = new Bundle();
                 bundle.putString("IdUsuario", User.getId());
-                bundle.putInt("Cant", 2);
+                bundle.putInt("Cant", Cant);
                 bundle.putSerializable("ListaRecursos", ListaRecursos);
                 bundle.putSerializable("ListaTags", ListaTags);
+                indicadorActivity = 1;
+                bundle.putSerializable("IndicadorActivity", indicadorActivity);
                 Intent intent = new Intent(MainActivity.this, AgregarEditar.class);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -120,17 +143,78 @@ public class MainActivity extends AppCompatActivity {
         });
         ButterKnife.bind(this);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        ListaEventos.setLayoutManager(linearLayoutManager);
+        //ListaEventos.setLayoutManager(linearLayoutManager);
         db = FirebaseFirestore.getInstance();
-        //obtenerListaEventos();
+        obtenerListaEventos();
         obtenerListaRecursos();
         obtenerListaTags();
     }
+
+    public ArrayList<Evento> obtenerListaDeEventos() {
+        return  _listaEventos;
+    }
+
+    public ArrayList<Recurso> obtenerListaDeRecursos() {
+        return ListaRecursos;
+    }
+
+    public ArrayList<Tag> obtenerListaDeTags() {
+        return ListaTags;
+    }
+
+    public String obtenerIdUsuario() {
+        return User.getId();
+    }
+
+    public void SeIngresoElDatoDefinido(ArrayList<Evento> listaEventos) {
+        Log.d("Frag", "Se ingresó dato en el Fragment");
+
+        _listaEventos = listaEventos;
+
+        MostrarResultadoDefinido();
+    }
+
+    public void SeIngresoElDatoIndefinido(ArrayList<Evento> listaEventos) {
+        Log.d("Frag", "Se ingresó dato en el Fragment");
+
+        _listaEventos = listaEventos;
+
+        MostrarResultadoIndefinido();
+    }
+
+    private void MostrarResultadoDefinido() {
+        fragMostrarEventosDef miFragDeResultado=new fragMostrarEventosDef();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
+    private void MostrarResultadoIndefinido() {
+        fragMostrarEventosIndef miFragDeResultado=new fragMostrarEventosIndef();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
+    private void MostrarCalendario() {
+        fragMostrarCalendario miFragDeResultado=new fragMostrarCalendario();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
     private void obtenerListaEventos() {
-        db.collection("usuarios").document("lorPOE2730QHl1Fh5Nhc").collection("Eventos").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("usuarios").document(User.getId()).collection("Eventos").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                 List<Evento> eventos = new ArrayList<>();
+                ListaEventosFrag.clear();
 
                 if (e!=null){
                 }
@@ -138,11 +222,23 @@ public class MainActivity extends AppCompatActivity {
                     for (DocumentSnapshot document : snapshots) {
                         Evento even = document.toObject(Evento.class);
                         even.setId(document.getId());
+                        even.setTitulo(document.getString("Titulo"));
+                        even.setFecha(document.getString("Fecha"));
+                        even.setHora(document.getString("Hora"));
+                        even.setLluvia(document.getBoolean("Lluvia"));
+                        even.setIndefinido(document.getBoolean("Indefinido"));
+                        even.setCompletado(document.getBoolean("Completado"));
+                        even.setImportancia(((Long) document.getLong("Importancia")).intValue());
+                        even.setDuracion(((Long) document.getLong("Duracion")).intValue());
+                        even.setComplementos((ArrayList<String>) document.get("Complementos"));
+                        even.setTags((ArrayList<String>) document.get("Tags"));
                         eventos.add(even);
+
+                        ListaEventosFrag.add(even);
                     }
                 }
                 mAdapter = new EventoAdapter(eventos, getApplicationContext(), db);
-                ListaEventos.setAdapter(mAdapter);
+                //ListaEventos.setAdapter(mAdapter);
             }
         });
     }
@@ -154,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 if (e!=null){
                 }
                 else {
+                    ListaRecursos.clear();
                     for (DocumentSnapshot document : snapshots) {
                         Recurso unRecurso = document.toObject(Recurso.class);
                         Recurso miRecurso=new Recurso();
@@ -173,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                 if (e!=null){
                 }
                 else {
+                    ListaTags.clear();
                     for (DocumentSnapshot document : snapshots) {
                         com.informatica.tutorialfirebase.Tag unTag = document.toObject(com.informatica.tutorialfirebase.Tag.class);
                         unTag.setId(document.getId());
@@ -184,8 +282,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void ComprobarUsuarios()
-    {
+    private void ComprobarUsuarios() {
         db.collection("usuarios").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {

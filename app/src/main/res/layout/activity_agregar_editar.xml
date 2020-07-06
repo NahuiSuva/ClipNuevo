@@ -289,7 +289,7 @@
                 android:drawableStart="@drawable/ic_complemento_24dp"
                 android:drawablePadding="10dp"
                 android:background="@drawable/discret_rounded_button"
-                android:text="Agregar complemento"
+                android:text="Complementos"
                 android:textSize="21dp"
                 android:textAlignment="textStart"
                 android:textColor="@color/colorBlack"
@@ -310,7 +310,7 @@
                 android:drawableStart="@drawable/ic_tag_24dp"
                 android:drawablePadding="10dp"
                 android:background="@drawable/discret_rounded_button"
-                android:text="Agregar tag"
+                android:text="Tags"
                 android:textSize="21dp"
                 android:textAllCaps="false"
                 android:textAlignment="textStart"
@@ -339,7 +339,8 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                app:layout_constraintTop_toBottomOf="@id/swLluvia" />
+                app:layout_constraintTop_toBottomOf="@id/btnAgregar"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/btnAgregar"

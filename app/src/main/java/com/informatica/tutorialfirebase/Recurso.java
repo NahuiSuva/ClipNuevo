@@ -14,6 +14,11 @@ public class Recurso implements Serializable {
         this.nombre=nom;
     }
 
+    public Recurso(String nom)
+    {
+        this.nombre=nom;
+    }
+
     public void setId(String id){this.id=id;}
     public void setNombre(String nombre){this.nombre=nombre;}
     public String getNombre(){return nombre;}
