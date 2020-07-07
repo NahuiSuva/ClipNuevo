@@ -16,6 +16,9 @@
     <item android:id="@+id/ItemComplementos"
         android:icon="@drawable/ic_complemento_24dp"
         android:title="Complementos"/>
+    <item android:id="@+id/ItemValoraciones"
+        android:icon="@drawable/ic_valoracion_24dp"
+        android:title="Valoraciones"/>
     <item android:id="@+id/ItemSuenio"
         android:icon="@drawable/ic_suenio_24dp"
         android:title="Tiempo de sueño"/>
