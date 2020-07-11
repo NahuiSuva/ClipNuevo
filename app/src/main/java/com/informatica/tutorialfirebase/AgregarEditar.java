@@ -61,6 +61,7 @@ public class AgregarEditar extends AppCompatActivity {
     Boolean lluvia;
     Boolean indefinido;
     Boolean completado;
+    Boolean valorado;
     ArrayList<Recurso> complementosSeleccionados;
     ArrayList<Tag> tagsSeleccionados;
     Bundle paqueteRecibidoMain;
@@ -299,12 +300,15 @@ public class AgregarEditar extends AppCompatActivity {
                         lluvia = swLluvia.isChecked();
                         indefinido = swIndefinido.isChecked();
                         completado = false;
-                        if (cont == 2) {
+                        valorado = false;
+
+
+                    if (cont == 2) {
                             //Si no tengo un ID quiere decir que es un registro nuevo. Si tengo un ID debo actualizar el existente
                             if (id.length() > 0) {
-                                ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado);
+                                ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
                             } else {
-                                AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado);
+                                AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
 
                             }
                             complementosSeleccionados.clear();
@@ -370,8 +374,8 @@ public class AgregarEditar extends AppCompatActivity {
 
     }
 
-    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
-        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado)).toMap();
+    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
+        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado)).toMap();
 
         db.collection("usuarios")
                 .document(IdUsuario)
@@ -393,8 +397,8 @@ public class AgregarEditar extends AppCompatActivity {
                 });
     }
 
-    private void AgregarEvento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
-        Map<String, Object> evento = new Evento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado).toMap();
+    private void AgregarEvento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
+        Map<String, Object> evento = new Evento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado).toMap();
 
         db.collection("usuarios")
                 .document(IdUsuario)

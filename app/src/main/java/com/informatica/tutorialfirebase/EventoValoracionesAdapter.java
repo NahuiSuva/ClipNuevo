@@ -1,9 +1,8 @@
 package com.informatica.tutorialfirebase;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -26,51 +26,48 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder> {
+public class EventoValoracionesAdapter extends RecyclerView.Adapter<EventoValoracionesAdapter.ViewHolder> {
 
     private List<Evento> eventos;
     private Context context;
     private FirebaseFirestore firestoreDB;
-    int indicadorActivity = 2;
-    ArrayList<Recurso> ListaRecursos;
-    ArrayList<Tag> ListaTags;
+    int indicadorActivity = 3;
     String IdUsuario;
     private FirebaseFirestore db;
 
 
-    public EventoAdapter(List<Evento> eventos, Context context, FirebaseFirestore firestoreDB) {
+    public EventoValoracionesAdapter(List<Evento> eventos, Context context, FirebaseFirestore firestoreDB) {
         this.eventos = eventos;
         this.context = context;
         this.firestoreDB = firestoreDB;
     }
 
-    public EventoAdapter(List<Evento> eventos, Context context, FirebaseFirestore firestoreDB, ArrayList<Recurso> ListaRecursos, ArrayList<Tag> ListaTags, String IdUsuario) {
+    public EventoValoracionesAdapter(List<Evento> eventos, Context context, FirebaseFirestore firestoreDB, String IdUsuario) {
         this.eventos = eventos;
         this.context = context;
         this.firestoreDB = firestoreDB;
-        this.ListaRecursos = ListaRecursos;
-        this.ListaTags = ListaTags;
         this.IdUsuario = IdUsuario;
     }
 
     @Override
-    public EventoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public EventoValoracionesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
 
-        return new EventoAdapter.ViewHolder(view);
+        return new EventoValoracionesAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(EventoAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(EventoValoracionesAdapter.ViewHolder holder, int position) {
         final int itemPosition = position;
         final Evento even = eventos.get(itemPosition);
        // progressBar.setVisibility(View.GONE);
         holder.titulo.setText(even.getTitulo());
         holder.fecha.setText(even.getFecha());
         holder.duracion.setText(Integer.toString(even.getDuracion()));
+        holder.completado.setChecked(true);
         holder.itemView.setOnClickListener(v ->
         {
-            Intent intent = new Intent(context, AgregarEditar.class);
+            Intent intent = new Intent(context, ValoracionActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("id", even.getId());
             intent.putExtra("titulo", even.getTitulo());
@@ -83,11 +80,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             intent.putExtra("lluvia", even.getLluvia());
             intent.putExtra("indefinido", even.getIndefinido());
             intent.putExtra("completado", even.getCompletado());
-            intent.putExtra("valorado", even.getValorado());
             intent.putExtra("IndicadorActivity", indicadorActivity);
             intent.putExtra("Cant", 1);
-            intent.putExtra("ListaRecursos", ListaRecursos);
-            intent.putExtra("ListaTags", ListaTags);
             intent.putExtra("IdUsuario", IdUsuario);
 
 
@@ -106,7 +100,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             ArrayList<String> tags = even.getTags();
             Boolean lluvia = even.getLluvia();
             Boolean indefinido = even.getIndefinido();
-            Boolean completado = true;
+            Boolean completado = false;
             Boolean valorado = false;
 
             ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
@@ -161,6 +155,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                     }
                 });
     }
+
+
 
 
 }

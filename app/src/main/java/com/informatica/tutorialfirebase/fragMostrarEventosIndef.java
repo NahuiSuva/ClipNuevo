@@ -54,7 +54,10 @@ public class fragMostrarEventosIndef extends Fragment implements View.OnClickLis
             if(listaTraida.get(i).getCompletado() == false) {
 
                 if (listaTraida.get(i).getIndefinido() == true) {
-                    listaAMostrar.add(listaTraida.get(i));
+
+                    if (listaTraida.get(i).getValorado() == false) {
+                        listaAMostrar.add(listaTraida.get(i));
+                    }
                 }
             }
         }

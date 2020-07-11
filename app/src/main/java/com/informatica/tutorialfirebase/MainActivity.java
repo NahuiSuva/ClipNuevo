@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     MostrarCalendario();
                 }
+                else if(menuItem.getTitle().equals("Valoraciones"))
+                {
+                    SeIngresoElDatoValoraciones(ListaEventosFrag);
+                }
                 return true;
             }
         });
@@ -182,6 +186,14 @@ public class MainActivity extends AppCompatActivity {
         MostrarResultadoIndefinido();
     }
 
+    public void SeIngresoElDatoValoraciones(ArrayList<Evento> listaEventos) {
+        Log.d("Frag", "Se ingresó dato en el Fragment");
+
+        _listaEventos = listaEventos;
+
+        MostrarResultadoValoraciones();
+    }
+
     private void MostrarResultadoDefinido() {
         fragMostrarEventosDef miFragDeResultado=new fragMostrarEventosDef();
 
@@ -193,6 +205,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void MostrarResultadoIndefinido() {
         fragMostrarEventosIndef miFragDeResultado=new fragMostrarEventosIndef();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
+    private void MostrarResultadoValoraciones() {
+        fragMostrarEventosAValorar miFragDeResultado=new fragMostrarEventosAValorar();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
         TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
@@ -228,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                         even.setLluvia(document.getBoolean("Lluvia"));
                         even.setIndefinido(document.getBoolean("Indefinido"));
                         even.setCompletado(document.getBoolean("Completado"));
+                        even.setValorado(document.getBoolean("Valorado"));
                         even.setImportancia(((Long) document.getLong("Importancia")).intValue());
                         even.setDuracion(((Long) document.getLong("Duracion")).intValue());
                         even.setComplementos((ArrayList<String>) document.get("Complementos"));

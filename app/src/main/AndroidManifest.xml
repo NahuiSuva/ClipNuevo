@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.informatica.tutorialfirebase">
 
     <application
@@ -8,8 +9,14 @@
         android:label="Clip"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".fragMostrarEventosDef"></activity>
+        android:theme="@style/AppTheme"
+        tools:replace="android:label">
+
+
+        <activity android:name=".ValoracionActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".fragMostrarEventosDef" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +28,7 @@
         <activity
             android:name=".MainActivity"
             android:label="Clip"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -17,6 +17,7 @@ public class Evento implements Serializable {
     private Boolean lluvia;
     private Boolean indefinido;
     private Boolean completado;
+    private Boolean valorado;
 
     // En caso de tener foto, podés utilizar este constructor
     /*public Alumno(String nombre, String division, int calificacion, String foto) {
@@ -28,7 +29,7 @@ public class Evento implements Serializable {
     public Evento(){}
 
 
-    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
+    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
         this.id=id;
         this.titulo=titulo;
         this.fecha=fecha;
@@ -40,8 +41,9 @@ public class Evento implements Serializable {
         this.lluvia=lluvia;
         this.indefinido=indefinido;
         this.completado = completado;
+        this.valorado = valorado;
     }
-    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado) {
+    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
         this.titulo=titulo;
         this.fecha=fecha;
         this.duracion=duracion;
@@ -52,6 +54,7 @@ public class Evento implements Serializable {
         this.lluvia=lluvia;
         this.indefinido=indefinido;
         this.completado = completado;
+        this.valorado = valorado;
     }
 
     public String getId(){return  id;}
@@ -138,6 +141,14 @@ public class Evento implements Serializable {
         this.completado = completado;
     }
 
+    public Boolean getValorado() {
+        return valorado;
+    }
+
+    public void setValorado(Boolean valorado) {
+        this.valorado = valorado;
+    }
+
     public Map<String, Object> toMap() {
 
         HashMap<String, Object> result = new HashMap<>();
@@ -151,6 +162,7 @@ public class Evento implements Serializable {
         result.put("Lluvia", this.lluvia);
         result.put("Indefinido", this.indefinido);
         result.put("Completado", this.completado);
+        result.put("Valorado", this.valorado);
 
         return result;
     }
