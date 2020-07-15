@@ -419,7 +419,6 @@ public class AgregarEditar extends AppCompatActivity {
                 });
     }
 
-
     private void EliminarEvento(String id) {
         db.collection("usuarios")
                 .document(IdUsuario)
