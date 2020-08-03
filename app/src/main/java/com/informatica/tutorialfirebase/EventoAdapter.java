@@ -89,6 +89,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             intent.putExtra("ListaRecursos", ListaRecursos);
             intent.putExtra("ListaTags", ListaTags);
             intent.putExtra("IdUsuario", IdUsuario);
+            intent.putExtra("IdCalendar", even.getIdCalendar());
 
 
             context.startActivity(intent);
@@ -108,8 +109,9 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             Boolean indefinido = even.getIndefinido();
             Boolean completado = true;
             Boolean valorado = false;
+            long idCalendar = even.getIdCalendar();
 
-            ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
+            ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendar);
         });
     }
 
@@ -137,8 +139,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
     }
 
 
-    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
-        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado)).toMap();
+    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado, long idCalendar) {
+        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendar)).toMap();
 
         db = FirebaseFirestore.getInstance();
 

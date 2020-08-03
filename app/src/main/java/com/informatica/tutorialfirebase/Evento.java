@@ -18,6 +18,7 @@ public class Evento implements Serializable {
     private Boolean indefinido;
     private Boolean completado;
     private Boolean valorado;
+    private long idCalendar;
 
     // En caso de tener foto, podés utilizar este constructor
     /*public Alumno(String nombre, String division, int calificacion, String foto) {
@@ -29,7 +30,7 @@ public class Evento implements Serializable {
     public Evento(){}
 
 
-    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
+    public Evento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado, long idCalendar) {
         this.id=id;
         this.titulo=titulo;
         this.fecha=fecha;
@@ -42,8 +43,9 @@ public class Evento implements Serializable {
         this.indefinido=indefinido;
         this.completado = completado;
         this.valorado = valorado;
+        this.idCalendar = idCalendar;
     }
-    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
+    public Evento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado, long idCalendar) {
         this.titulo=titulo;
         this.fecha=fecha;
         this.duracion=duracion;
@@ -55,6 +57,7 @@ public class Evento implements Serializable {
         this.indefinido=indefinido;
         this.completado = completado;
         this.valorado = valorado;
+        this.idCalendar = idCalendar;
     }
 
     public String getId(){return  id;}
@@ -149,6 +152,14 @@ public class Evento implements Serializable {
         this.valorado = valorado;
     }
 
+    public long getIdCalendar() {
+        return idCalendar;
+    }
+
+    public void setIdCalendar(long idCalendar) {
+        this.idCalendar = idCalendar;
+    }
+
     public Map<String, Object> toMap() {
 
         HashMap<String, Object> result = new HashMap<>();
@@ -163,6 +174,7 @@ public class Evento implements Serializable {
         result.put("Indefinido", this.indefinido);
         result.put("Completado", this.completado);
         result.put("Valorado", this.valorado);
+        result.put("IdCalendar", this.idCalendar);
 
         return result;
     }

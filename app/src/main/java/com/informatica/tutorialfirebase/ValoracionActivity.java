@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import butterknife.BindView;
-import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class ValoracionActivity extends AppCompatActivity {
 
@@ -88,7 +87,7 @@ public class ValoracionActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        ActualizarEvento(idEvento, bundle.getString("titulo"), bundle.getString("fecha"), bundle.getInt("duracion"), bundle.getString("hora"), bundle.getInt("importancia"), bundle.getStringArrayList("complementos"), bundle.getStringArrayList("tags"), bundle.getBoolean("lluvia"), bundle.getBoolean("indefinido"), bundle.getBoolean("completado"), true);
+        ActualizarEvento(idEvento, bundle.getString("titulo"), bundle.getString("fecha"), bundle.getInt("duracion"), bundle.getString("hora"), bundle.getInt("importancia"), bundle.getStringArrayList("complementos"), bundle.getStringArrayList("tags"), bundle.getBoolean("lluvia"), bundle.getBoolean("indefinido"), bundle.getBoolean("completado"), true, bundle.getLong("IdCalendar"));
 
         finish();
     }
@@ -115,8 +114,8 @@ public class ValoracionActivity extends AppCompatActivity {
                 });
     }
 
-    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
-        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado)).toMap();
+    private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado, long idCalendar) {
+        Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendar)).toMap();
 
         db.collection("usuarios")
                 .document(IdUsuario)

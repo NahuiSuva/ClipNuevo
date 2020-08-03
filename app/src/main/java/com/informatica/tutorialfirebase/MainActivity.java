@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
         paqueteRecibido = getIntent().getExtras();
         User.setId(paqueteRecibido.getString("IdUsuario"));
         User.setNombre(paqueteRecibido.getString("Nombre"));
+        Long CalId = paqueteRecibido.getLong("CalId");
+        String Mail = paqueteRecibido.getString("Mail");
 
         //ComprobarUsuarios();
 
@@ -138,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putInt("Cant", Cant);
                 bundle.putSerializable("ListaRecursos", ListaRecursos);
                 bundle.putSerializable("ListaTags", ListaTags);
+                bundle.putLong("CalId", CalId);
+                bundle.putString("Mail", Mail);
                 indicadorActivity = 1;
                 bundle.putSerializable("IndicadorActivity", indicadorActivity);
                 Intent intent = new Intent(MainActivity.this, AgregarEditar.class);
@@ -254,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                         even.setDuracion(((Long) document.getLong("Duracion")).intValue());
                         even.setComplementos((ArrayList<String>) document.get("Complementos"));
                         even.setTags((ArrayList<String>) document.get("Tags"));
+                        even.setIdCalendar(document.getLong("IdCalendar"));
                         eventos.add(even);
 
                         ListaEventosFrag.add(even);

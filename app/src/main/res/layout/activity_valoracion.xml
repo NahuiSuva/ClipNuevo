@@ -8,14 +8,18 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Valore el evento"
-        android:textAlignment="center"
-        android:textSize="36sp"
+        android:text="Valorar el evento"
+        android:background="@drawable/semirounded_background"
+        android:textAlignment="textStart"
+        android:textSize="18dp"
+        android:textColor="@color/colorWhite"
+        android:padding="10dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="-42dp" />
+        />
 
     <!--RatingBar
         android:id="@+id/rating"
@@ -39,8 +43,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:showLine="true"
+        app:textNonSelectionColor="@color/colorWhite"
+        app:textSelectionColor="@color/colorWhite"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/swFechaV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +60,9 @@
         android:layout_marginTop="40dp"
         android:text="Fecha"
         android:textAlignment="viewStart"
-        android:textSize="24sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/smile_rating" />
 
@@ -74,7 +82,9 @@
         android:layout_marginTop="32dp"
         android:text="Hora"
         android:textAlignment="viewStart"
-        android:textSize="24sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Fecha" />
 
@@ -94,7 +104,9 @@
         android:layout_marginTop="32dp"
         android:text="Duración"
         android:textAlignment="viewStart"
-        android:textSize="24sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Hora" />
 
@@ -114,7 +126,9 @@
         android:layout_marginTop="32dp"
         android:text="Complementos"
         android:textAlignment="viewStart"
-        android:textSize="24sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Duracion" />
 
@@ -134,7 +148,9 @@
         android:layout_marginTop="32dp"
         android:text="Tags"
         android:textAlignment="viewStart"
-        android:textSize="24sp"
+        android:textColor="@color/colorBlack"
+        android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Complementos" />
 
@@ -148,13 +164,16 @@
 
     <Button
         android:id="@+id/btnEnviarValoracion"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Enviar valoración -->"
-        android:textAlignment="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="20dp"
         android:textColor="@color/colorWhite"
+        android:text="Enviar valoración"
+        android:background="@drawable/primary_rounded_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:onClick="enviarValoracion"/>
