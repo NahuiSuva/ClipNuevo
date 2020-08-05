@@ -424,7 +424,9 @@ public class AgregarEditar extends AppCompatActivity {
 
     private void AgregarEvento(String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado) {
 
-        AgregarAGoogle();
+        if(!indefinido){
+            AgregarAGoogle();
+        }
         Map<String, Object> evento = new Evento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, eventoID).toMap();
         Log.d("Calendario", "Id evento agregado es: " + eventoID);
 
@@ -460,6 +462,7 @@ public class AgregarEditar extends AppCompatActivity {
         }
 
         beginTime.set(year,month, day, hora1, minuto);
+        Log.d("Horario", "Hora:" + hora1 + ":" + minuto);
         startMillis = beginTime.getTimeInMillis();
         Calendar endTime = Calendar.getInstance();
         endTime.set(year,month, day, hora1+horaDuracion, minuto+minutoDuracion);
@@ -497,6 +500,7 @@ public class AgregarEditar extends AppCompatActivity {
         startMillis = beginTime.getTimeInMillis();
         Calendar endTime = Calendar.getInstance();
         endTime.set(year,month, day, hora1+horaDuracion, minuto+minutoDuracion);
+        Log.d("Calendario", "Horas: " + hora1 + " Duración: " + horaDuracion);
         endMillis = endTime.getTimeInMillis();
 
         ContentResolver cr = getContentResolver();
@@ -508,12 +512,13 @@ public class AgregarEditar extends AppCompatActivity {
         values.put(CalendarContract.Events.TITLE, titulo);
         Log.d("Calendario", "titulo a modificar: " + titulo);
         values.put(CalendarContract.Events.CALENDAR_ID, IdCalendar);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Argentina/Buenos_Aires");
         updateUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, idEvent);
         try {
             int rows = cr.update(updateUri, values, null, null);
             Log.d("Calendario", "Rows updated: " + rows);
         }catch(Exception error){
-            Log.d("Calendario", "No se pudo actualizar" + error);
+            Log.d("Calendario", "No se pudo actualizar: " + error);
         }
 
     }
