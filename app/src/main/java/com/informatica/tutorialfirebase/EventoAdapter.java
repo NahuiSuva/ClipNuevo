@@ -93,16 +93,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
 
 
             context.startActivity(intent);
-
-            this.eventos.remove(even);
-            this.eventos.add(even);
-            try {
-                //Ponemos a "Dormir" el programa durante los ms que queremos
-                Thread.sleep(0,5*1000);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-            this.notifyDataSetChanged();
         });
 
         holder.completado.setOnClickListener(v ->
@@ -131,6 +121,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                 System.out.println(e);
             }
             this.notifyDataSetChanged();
+            holder.completado.setChecked(false);
         });
     }
 
