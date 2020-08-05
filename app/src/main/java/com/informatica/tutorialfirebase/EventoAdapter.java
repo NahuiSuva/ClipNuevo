@@ -67,7 +67,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
        // progressBar.setVisibility(View.GONE);
         holder.titulo.setText(even.getTitulo());
         holder.fecha.setText(even.getFecha());
-        holder.duracion.setText(Integer.toString(even.getDuracion()));
+        //holder.duracion.setText(Integer.toString(even.getDuracion()));
         holder.itemView.setOnClickListener(v ->
         {
             Intent intent = new Intent(context, AgregarEditar.class);
@@ -93,6 +93,16 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
 
 
             context.startActivity(intent);
+
+            this.eventos.remove(even);
+            this.eventos.add(even);
+            try {
+                //Ponemos a "Dormir" el programa durante los ms que queremos
+                Thread.sleep(0,5*1000);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            this.notifyDataSetChanged();
         });
 
         holder.completado.setOnClickListener(v ->
@@ -112,6 +122,15 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             long idCalendar = even.getIdCalendar();
 
             ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendar);
+
+            this.eventos.remove(even);
+            try {
+                //Ponemos a "Dormir" el programa durante los ms que queremos
+                Thread.sleep(0,5*1000);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+            this.notifyDataSetChanged();
         });
     }
 

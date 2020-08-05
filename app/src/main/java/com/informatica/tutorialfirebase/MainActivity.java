@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void obtenerListaEventos() {
         db.collection("usuarios").document(User.getId()).collection("Eventos").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
+        @Override
             public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
                 List<Evento> eventos = new ArrayList<>();
                 ListaEventosFrag.clear();
