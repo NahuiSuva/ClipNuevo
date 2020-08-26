@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     private void MostrarCalendario() {
         fragMostrarCalendario miFragDeResultado=new fragMostrarCalendario();
 
