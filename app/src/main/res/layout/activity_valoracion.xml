@@ -57,12 +57,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="40dp"
         android:text="Fecha"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
         android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/smile_rating" />
 
@@ -70,6 +70,7 @@
         android:id="@+id/swFechaV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/Fecha"
         app:layout_constraintEnd_toEndOf="@+id/swHoraV"
         app:layout_constraintTop_toTopOf="@+id/Fecha" />
 
@@ -78,12 +79,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:text="Hora"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12dp"
         android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Fecha" />
 
@@ -91,6 +92,7 @@
         android:id="@+id/swHoraV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/Hora"
         app:layout_constraintEnd_toEndOf="@+id/swDuracionV"
         app:layout_constraintTop_toTopOf="@+id/Hora" />
 
@@ -99,12 +101,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:text="Duración"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
         android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Hora" />
 
@@ -112,6 +114,7 @@
         android:id="@+id/swDuracionV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/Duracion"
         app:layout_constraintEnd_toEndOf="@+id/swComplementosV"
         app:layout_constraintTop_toTopOf="@+id/Duracion" />
 
@@ -120,12 +123,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:text="Complementos"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
         android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Duracion" />
 
@@ -142,12 +145,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:text="Tags"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
         android:textStyle="bold"
+        android:textSize="21dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Complementos" />
 
@@ -155,6 +158,7 @@
         android:id="@+id/swTagsV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/Tags"
         app:layout_constraintEnd_toEndOf="@+id/swComplementosV"
         app:layout_constraintTop_toTopOf="@+id/Tags" />
 
@@ -162,15 +166,17 @@
         android:id="@+id/btnEnviarValoracion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/primary_rounded_button"
-        android:text="Enviar valoración"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="20dp"
         android:textColor="@color/colorWhite"
-        android:textSize="12sp"
+        android:text="Enviar valoración"
+        android:background="@drawable/primary_rounded_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swTagsV" />
+        android:onClick="enviarValoracion"/>
 
 
 

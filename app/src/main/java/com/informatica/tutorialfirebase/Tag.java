@@ -14,9 +14,17 @@ public class Tag implements Serializable{
         this.nombre=nom;
     }
 
+    public Tag(String nom)
+    {
+        this.nombre=nom;
+    }
+
+
     public void setId(String id){this.id=id;}
     public void setNombre(String nombre){this.nombre=nombre;}
     public String getNombre() {
         return nombre;
     }
+    public String getId(){return id;}
+
 }

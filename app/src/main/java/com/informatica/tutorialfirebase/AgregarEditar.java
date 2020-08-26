@@ -10,13 +10,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -148,112 +146,126 @@ public class AgregarEditar extends AppCompatActivity {
 
         contexto = this;
 
-        ObtenerReferencias();
-
-        swIndefinido.setOnCheckedChangeListener(swIndefinido_CheckedChange);
-        btnAgregar.setOnClickListener(btnAgregar_Click);
-
-            tpDuracion.setIs24HourView(true);
-            tpDuracion.setHour(1);
-            tpDuracion.setMinute(0);
-
-            complementos = new ArrayList<String>();
-            tags = new ArrayList<String>();
-            complementosSeleccionados = new ArrayList<Recurso>();
-            complementosSeleccionados.clear();
-            Recurso miRecurso = new Recurso();
-            miRecurso.setNombre("nada");
-            complementosSeleccionados.add(miRecurso);
-            tagsSeleccionados = new ArrayList<Tag>();
-            tagsSeleccionados.clear();
-            Tag miTag = new Tag();
-            miTag.setNombre("nada");
-            tagsSeleccionados.add(miTag);
-
-            Bundle bundle = getIntent().getExtras();
-            if (bundle.getInt("IndicadorActivity") == 1) {
-                paqueteRecibidoMain = getIntent().getExtras();
-                IdUsuario = paqueteRecibidoMain.getString("IdUsuario");
-                IdCalendar=paqueteRecibidoMain.getLong("CalId");
-                Mail = paqueteRecibidoMain.getString("Mail");
-                ListaDeRecursos = new ArrayList<Recurso>();
-                ListaDeRecursos = (ArrayList<Recurso>) paqueteRecibidoMain.getSerializable("ListaRecursos");
-
-                ListaDeTags = new ArrayList<Tag>();
-                ListaDeTags = (ArrayList<Tag>) paqueteRecibidoMain.getSerializable("ListaTags");
-            }
-            else if (bundle.getInt("IndicadorActivity") == 2) {
-                paqueteRecibidoAdapter = getIntent().getExtras();
-
-                ListaDeRecursos = new ArrayList<Recurso>();
-                ListaDeRecursos = (ArrayList<Recurso>) paqueteRecibidoAdapter.getSerializable("ListaRecursos");
-
-                ListaDeTags = new ArrayList<Tag>();
-                ListaDeTags = (ArrayList<Tag>) paqueteRecibidoAdapter.getSerializable("ListaTags");
-
-                paqueteRecibidoMain = getIntent().getExtras();
-                IdUsuario = paqueteRecibidoAdapter.getString("IdUsuario");
-            }
-
-
-            //Compruebo si llegaron datos a esta activity.
-            // Si llegaron voy a mostrar la pantalla de Editar. Si no llegaron muestro la de crear
-
-            if (bundle.getInt("Cant") != 2) {
-                lblTitulo.setText("Modificar Evento");
-                btnAgregar.setText("EDITAR");
-
-                id = bundle.getString("id");
-                edtTitulo.setText(bundle.getString("titulo"));
-                int Inicio = bundle.getString("fecha").indexOf("/");
-                int Fin = bundle.getString("fecha").indexOf("/", Inicio + 1);
-                dia = Integer.parseInt(bundle.getString("fecha").substring(0, Inicio));
-                mes = Integer.parseInt(bundle.getString("fecha").substring(Inicio + 1, Fin));
-                anio = Integer.parseInt(bundle.getString("fecha").substring(Fin + 1, Fin + 5));
-                dpFecha.updateDate(anio, mes, dia);
-                tpDuracion.setMinute(bundle.getInt("minutos"));
-                tpDuracion.setHour(bundle.getInt("horas"));
-                int InicioHora = bundle.getString("hora").indexOf(":");
-                tpHora.setHour(Integer.parseInt(bundle.getString("hora").substring(0, InicioHora)));
-                tpHora.setMinute(Integer.parseInt(bundle.getString("hora").substring(InicioHora + 1)));
-                double duracion = (bundle.getInt("duracion") / 60);
-                int InicioDuracion = String.valueOf(duracion).indexOf(".");
-                tpDuracion.setHour(Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion)));
-                tpDuracion.setMinute(bundle.getInt("duracion") - ((Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion))) * 60));
-                if (bundle.getInt("importancia") == 1) {
-                    rd1.setChecked(true);
-                } else if (bundle.getInt("importancia") == 2) {
-                    rd2.setChecked(true);
-                } else {
-                    rd3.setChecked(true);
-                }
-
-                //edtComplementos.setText(bundle.getString("complementos"));
-                //edtTags.setText(bundle.getString("tags"));
-                swLluvia.setChecked(bundle.getBoolean("lluvia"));
-                swIndefinido.setChecked(bundle.getBoolean("indefinido"));
-                idCalendarModif = (long) bundle.get("IdCalendar");
-
-                btnEliminar.setVisibility(View.VISIBLE);
-            }
-            else {
-                lblTitulo.setText("Agregar Evento");
-                btnAgregar.setText("AGREGAR");
-                btnEliminar.setVisibility(View.GONE);
-            }
-    }
-
-    private void ObtenerReferencias() {
         abrirFecha = findViewById(R.id.btnFecha);
         abrirHora = findViewById(R.id.btnHora);
         abrirDuracion = findViewById(R.id.btnDuracion);
-    }
 
-    protected View.OnClickListener btnAgregar_Click =  new View.OnClickListener() {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onClick(View v) {
+        swIndefinido.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (swIndefinido.isChecked()) {
+                    abrirHora.setEnabled(false);
+                    abrirHora.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
+                    abrirFecha.setEnabled(false);
+                    abrirFecha.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                    tpHora.setEnabled(false);
+                    dpFecha.setEnabled(false);
+                } else {
+                    abrirHora.setEnabled(true);
+                    abrirHora.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                    abrirFecha.setEnabled(true);
+                    abrirFecha.setTextColor(getResources().getColor(R.color.colorBlack));
+
+                    tpHora.setEnabled(true);
+                    dpFecha.setEnabled(true);
+                }
+            }
+        });
+
+        tpDuracion.setIs24HourView(true);
+        tpDuracion.setHour(1);
+        tpDuracion.setMinute(0);
+
+        complementos = new ArrayList<String>();
+        tags = new ArrayList<String>();
+        complementosSeleccionados = new ArrayList<Recurso>();
+        complementosSeleccionados.clear();
+        Recurso miRecurso = new Recurso();
+        miRecurso.setNombre("nada");
+        complementosSeleccionados.add(miRecurso);
+        tagsSeleccionados = new ArrayList<Tag>();
+        tagsSeleccionados.clear();
+        Tag miTag = new Tag();
+        miTag.setNombre("nada");
+        tagsSeleccionados.add(miTag);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.getInt("IndicadorActivity") == 1) {
+            paqueteRecibidoMain = getIntent().getExtras();
+            IdUsuario = paqueteRecibidoMain.getString("IdUsuario");
+            IdCalendar=paqueteRecibidoMain.getLong("CalId");
+            Mail = paqueteRecibidoMain.getString("Mail");
+            ListaDeRecursos = new ArrayList<Recurso>();
+            ListaDeRecursos = (ArrayList<Recurso>) paqueteRecibidoMain.getSerializable("ListaRecursos");
+
+            ListaDeTags = new ArrayList<Tag>();
+            ListaDeTags = (ArrayList<Tag>) paqueteRecibidoMain.getSerializable("ListaTags");
+        } else if (bundle.getInt("IndicadorActivity") == 2) {
+            paqueteRecibidoAdapter = getIntent().getExtras();
+
+            ListaDeRecursos = new ArrayList<Recurso>();
+            ListaDeRecursos = (ArrayList<Recurso>) paqueteRecibidoAdapter.getSerializable("ListaRecursos");
+
+            ListaDeTags = new ArrayList<Tag>();
+            ListaDeTags = (ArrayList<Tag>) paqueteRecibidoAdapter.getSerializable("ListaTags");
+
+            paqueteRecibidoMain = getIntent().getExtras();
+            IdUsuario = paqueteRecibidoAdapter.getString("IdUsuario");
+        }
+
+
+        //Compruebo si llegaron datos a esta activity.
+        // Si llegaron voy a mostrar la pantalla de Editar. Si no llegaron muestro la de crear
+
+        if (bundle.getInt("Cant") != 2) {
+            lblTitulo.setText("Modificar Evento");
+            btnAgregar.setText("EDITAR");
+
+            id = bundle.getString("id");
+            edtTitulo.setText(bundle.getString("titulo"));
+            int Inicio = bundle.getString("fecha").indexOf("/");
+            int Fin = bundle.getString("fecha").indexOf("/", Inicio + 1);
+            dia = Integer.parseInt(bundle.getString("fecha").substring(0, Inicio));
+            mes = Integer.parseInt(bundle.getString("fecha").substring(Inicio + 1, Fin));
+            anio = Integer.parseInt(bundle.getString("fecha").substring(Fin + 1, Fin + 5));
+            dpFecha.updateDate(anio, mes, dia);
+            tpDuracion.setMinute(bundle.getInt("minutos"));
+            tpDuracion.setHour(bundle.getInt("horas"));
+            int InicioHora = bundle.getString("hora").indexOf(":");
+            tpHora.setHour(Integer.parseInt(bundle.getString("hora").substring(0, InicioHora)));
+            tpHora.setMinute(Integer.parseInt(bundle.getString("hora").substring(InicioHora + 1)));
+            double duracion = (bundle.getInt("duracion") / 60);
+            int InicioDuracion = String.valueOf(duracion).indexOf(".");
+            tpDuracion.setHour(Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion)));
+            tpDuracion.setMinute(bundle.getInt("duracion") - ((Integer.parseInt(String.valueOf(duracion).substring(0, InicioDuracion))) * 60));
+            if (bundle.getInt("importancia") == 1) {
+                rd1.setChecked(true);
+            } else if (bundle.getInt("importancia") == 2) {
+                rd2.setChecked(true);
+            } else {
+                rd3.setChecked(true);
+            }
+
+            //edtComplementos.setText(bundle.getString("complementos"));
+            //edtTags.setText(bundle.getString("tags"));
+            swLluvia.setChecked(bundle.getBoolean("lluvia"));
+            swIndefinido.setChecked(bundle.getBoolean("indefinido"));
+            idCalendarModif = (long) bundle.get("IdCalendar");
+
+            btnEliminar.setVisibility(View.VISIBLE);
+        } else {
+            lblTitulo.setText("Agregar Evento");
+            btnAgregar.setText("AGREGAR");
+            btnEliminar.setVisibility(View.GONE);
+        }
+
+        btnAgregar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
                 cont = 0;
                 int cantAdv = 0;
 
@@ -320,43 +332,19 @@ public class AgregarEditar extends AppCompatActivity {
                         ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendarModif);
                     } else {
                         AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
+
                     }
                     complementosSeleccionados.clear();
                     tagsSeleccionados.clear();
 
-                    Log.d("ActivityResult", "Volvio");
-
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
+                    finish();
+                }
             }
-        }
-    };
 
-    protected CompoundButton.OnCheckedChangeListener swIndefinido_CheckedChange = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if (swIndefinido.isChecked()) {
-                abrirHora.setEnabled(false);
-                abrirHora.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
-                abrirFecha.setEnabled(false);
-                abrirFecha.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        });
+    }
 
-                tpHora.setEnabled(false);
-                dpFecha.setEnabled(false);
-            } else {
-                abrirHora.setEnabled(true);
-                abrirHora.setTextColor(getResources().getColor(R.color.colorBlack));
-
-                abrirFecha.setEnabled(true);
-                abrirFecha.setTextColor(getResources().getColor(R.color.colorBlack));
-
-                tpHora.setEnabled(true);
-                dpFecha.setEnabled(true);
-            }
-        }
-    };
 
     public void mostrarFecha(View vista) {
         if (dpFecha.getVisibility() == View.VISIBLE) {
