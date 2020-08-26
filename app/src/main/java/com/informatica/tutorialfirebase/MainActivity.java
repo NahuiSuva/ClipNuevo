@@ -1,5 +1,6 @@
 package com.informatica.tutorialfirebase;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -56,6 +57,11 @@ public class MainActivity extends AppCompatActivity {
     int Cant = 0;
     private ArrayList<Evento> _listaEventos;
     int indicadorActivity = 1;
+    String frag = "";
+
+    private fragMostrarEventosDef miFragDeResultadoDef;
+    private fragMostrarEventosIndef miFragDeResultadoIndef;
+    private fragMostrarEventosAValorar miFragDeResultado;
 
     FragmentManager AdminFragments;
     FragmentTransaction TransaccionesDeFragment;
@@ -199,25 +205,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void MostrarResultadoDefinido() {
-        fragMostrarEventosDef miFragDeResultado=new fragMostrarEventosDef();
+        miFragDeResultadoDef=new fragMostrarEventosDef();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
-        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultadoDef);
         TransaccionesDeFragment.commit();
 
+        frag = "def";
     }
 
     private void MostrarResultadoIndefinido() {
-        fragMostrarEventosIndef miFragDeResultado=new fragMostrarEventosIndef();
+        miFragDeResultadoIndef=new fragMostrarEventosIndef();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
-        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultadoIndef);
         TransaccionesDeFragment.commit();
 
+        frag = "indef";
     }
 
     private void MostrarResultadoValoraciones() {
-        fragMostrarEventosAValorar miFragDeResultado=new fragMostrarEventosAValorar();
+        miFragDeResultado=new fragMostrarEventosAValorar();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
         TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
@@ -346,5 +354,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            Log.d("ActivityResult", "Llego " + requestCode + " " + resultCode);
+
+            if(frag.equals("def"))
+            {
+                if(resultCode == Activity.RESULT_OK){
+                    miFragDeResultadoDef.Refrescar();
+                }
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    //Write your code if there's no result
+                    miFragDeResultadoDef.Refrescar();
+                }
+            }
+            else
+            {
+                if(resultCode == Activity.RESULT_OK){
+                    miFragDeResultadoIndef.Refrescar();
+                }
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    //Write your code if there's no result
+                    miFragDeResultadoIndef.Refrescar();
+                }
+            }
+
+        }
+        else if(requestCode == 2)
+        {
+            if(resultCode == Activity.RESULT_OK){
+                miFragDeResultado.Refrescar();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                miFragDeResultado.Refrescar();
+            }
+        }
+
+    }//onActivityResult
 
 }

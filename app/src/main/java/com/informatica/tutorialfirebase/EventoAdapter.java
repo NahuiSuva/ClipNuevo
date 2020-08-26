@@ -1,6 +1,7 @@
 package com.informatica.tutorialfirebase;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -66,12 +67,22 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
         final Evento even = eventos.get(itemPosition);
        // progressBar.setVisibility(View.GONE);
         holder.titulo.setText(even.getTitulo());
-        holder.fecha.setText(even.getFecha());
+        Boolean indefinidoComp;
+        indefinidoComp = even.getIndefinido();
+        if(indefinidoComp == true)
+        {
+            holder.fecha.setText("Indefinido");
+        }
+        else
+        {
+            holder.fecha.setText(even.getFecha());
+        }
+
         //holder.duracion.setText(Integer.toString(even.getDuracion()));
         holder.itemView.setOnClickListener(v ->
         {
             Intent intent = new Intent(context, AgregarEditar.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("id", even.getId());
             intent.putExtra("titulo", even.getTitulo());
             intent.putExtra("fecha", even.getFecha());
@@ -91,8 +102,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
             intent.putExtra("IdUsuario", IdUsuario);
             intent.putExtra("IdCalendar", even.getIdCalendar());
 
-
-            context.startActivity(intent);
+            ((Activity) context).startActivityForResult(intent,1);
         });
 
         holder.completado.setOnClickListener(v ->
@@ -173,6 +183,5 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                     }
                 });
     }
-
 
 }
