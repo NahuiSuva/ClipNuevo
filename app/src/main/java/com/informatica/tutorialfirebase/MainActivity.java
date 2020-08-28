@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager AdminFragments;
     FragmentTransaction TransaccionesDeFragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
