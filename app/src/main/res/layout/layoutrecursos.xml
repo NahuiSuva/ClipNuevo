@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/lblTitulo"
                 app:layout_constraintStart_toStartOf="parent"
-                android:text="Nuevo complemento"
+                android:hint="Nuevo complemento"
                 android:layout_marginBottom="5dp"/>
 
             <Button
