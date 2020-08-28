@@ -14,11 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
-
-
-        <activity android:name=".ValoracionActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity android:name=".TagAdapter"></activity>
+        <activity android:name=".RecursoAdapter" />
+        <activity android:name=".fragMostrarRecursos" />
+        <activity android:name=".fragMostrarTags" />
+        <activity
+            android:name=".ValoracionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".fragMostrarEventosDef" />
         <activity android:name=".LoginActivity">
             <intent-filter>
