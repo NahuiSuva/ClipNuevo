@@ -1,13 +1,15 @@
 package com.informatica.tutorialfirebase;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.DocumentReference;
@@ -16,6 +18,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.squareup.okhttp.Response;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,12 +33,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.SparseBooleanArray;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,11 +68,7 @@ public class MainActivity extends AppCompatActivity {
     int Cant = 0;
     private ArrayList<Evento> _listaEventos;
     int indicadorActivity = 1;
-    String frag = "";
-
-    private fragMostrarEventosDef miFragDeResultadoDef;
-    private fragMostrarEventosIndef miFragDeResultadoIndef;
-    private fragMostrarEventosAValorar miFragDeResultado;
+    String variableLocalHost = "58229"; //Variable del local host
 
     FragmentManager AdminFragments;
     FragmentTransaction TransaccionesDeFragment;
@@ -116,6 +123,12 @@ public class MainActivity extends AppCompatActivity {
                 {
                     SeIngresoElDatoValoraciones(ListaEventosFrag);
                 }
+                else if(menuItem.getTitle().equals("Complementos")){
+                    MostrarResultadoRecursos();
+                }
+                else if(menuItem.getTitle().equals("Tags")){
+                    MostrarResultadoTags();
+                }
                 return true;
             }
         });
@@ -160,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
         //ListaEventos.setLayoutManager(linearLayoutManager);
         db = FirebaseFirestore.getInstance();
         obtenerListaEventos();
+        //obtenerEventosViaApi miTarea = new obtenerEventosViaApi();
+        //miTarea.execute();
         obtenerListaRecursos();
         obtenerListaTags();
     }
@@ -169,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public ArrayList<Recurso> obtenerListaDeRecursos() {
+        obtenerListaRecursos();
         return ListaRecursos;
     }
 
@@ -205,27 +221,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void MostrarResultadoDefinido() {
-        miFragDeResultadoDef=new fragMostrarEventosDef();
-
-        TransaccionesDeFragment=AdminFragments.beginTransaction();
-        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultadoDef);
-        TransaccionesDeFragment.commit();
-
-        frag = "def";
-    }
-
-    private void MostrarResultadoIndefinido() {
-        miFragDeResultadoIndef=new fragMostrarEventosIndef();
-
-        TransaccionesDeFragment=AdminFragments.beginTransaction();
-        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultadoIndef);
-        TransaccionesDeFragment.commit();
-
-        frag = "indef";
-    }
-
-    private void MostrarResultadoValoraciones() {
-        miFragDeResultado=new fragMostrarEventosAValorar();
+        fragMostrarEventosDef miFragDeResultado=new fragMostrarEventosDef();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
         TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
@@ -233,6 +229,39 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void MostrarResultadoIndefinido() {
+        fragMostrarEventosIndef miFragDeResultado=new fragMostrarEventosIndef();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
+    private void MostrarResultadoValoraciones() {
+        fragMostrarEventosAValorar miFragDeResultado=new fragMostrarEventosAValorar();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+
+    }
+
+    private void MostrarResultadoRecursos(){
+        fragMostrarRecursos miFragDeResultado=new fragMostrarRecursos();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+    }
+
+    private void MostrarResultadoTags(){
+        fragMostrarTags miFragDeResultado=new fragMostrarTags();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+    }
 
     private void MostrarCalendario() {
         fragMostrarCalendario miFragDeResultado=new fragMostrarCalendario();
@@ -279,6 +308,90 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private class obtenerEventosViaApi extends AsyncTask<String, Void, String>{
+        @Override
+        protected void onPreExecute(){super.onPreExecute();}
+
+        @Override
+        protected  String doInBackground(String... params){
+            HttpURLConnection miConexion = null;
+            URL strApiUrl;
+            float ResponseCode;
+            String strResultado = "";
+            try{
+                strApiUrl = new URL("http://10.0.2.2:"+variableLocalHost+"/eventos/"+User.getId().toString());
+                Log.d("Conexion api", "La url es: "+strApiUrl);
+                miConexion = (HttpURLConnection) strApiUrl.openConnection();
+                miConexion.setRequestMethod("GET");
+                ResponseCode = miConexion.getResponseCode();
+                Log.d("Conexion api","Codigo respuesta: "+ResponseCode);
+                if(ResponseCode==200){
+                    List<Evento> eventos = new ArrayList<>();
+                    ListaEventosFrag.clear();
+
+                    InputStream lector = miConexion.getInputStream();
+                    InputStreamReader lectorJSon=new InputStreamReader(lector, "utf-8");
+                    JsonParser ProcesadorDeJSon=new JsonParser();
+                    JsonArray arrayRespuesta=ProcesadorDeJSon.parse(lectorJSon).getAsJsonArray();
+
+                    for (int i=0; i<arrayRespuesta.size(); i++)
+                    {
+                        JsonObject unEvento = arrayRespuesta.get(i).getAsJsonObject();
+                        Evento even = new Evento();
+                        even.setId(unEvento.get("id").toString());
+                        Log.d("Conexion api", "id "+i+":");
+                        even.setTitulo(unEvento.get("Titulo").toString());
+                        even.setFecha(unEvento.get("Fecha").toString());
+                        even.setHora(unEvento.get("Hora").toString());
+                        even.setLluvia(unEvento.get("Lluvia").getAsBoolean());
+                        even.setIndefinido(unEvento.get("Indefinido").getAsBoolean());
+                        even.setCompletado(unEvento.get("Completado").getAsBoolean());
+                        even.setValorado(unEvento.get("Valorado").getAsBoolean());
+                        even.setImportancia(unEvento.get("Importancia").getAsInt());
+                        even.setDuracion(unEvento.get("Duracion").getAsInt());
+                        ArrayList<String> complementosAux = new ArrayList<String>();
+                        JsonArray jArray = (JsonArray) unEvento.get("Complementos");
+                        if (jArray != null) {
+                            for (int e=0;e<jArray.size();e++){
+                                complementosAux.add(jArray.get(e).toString());
+                            }
+                        }
+                        even.setComplementos(complementosAux);
+                        ArrayList<String> tagsAux = new ArrayList<String>();
+                        JsonArray tagsArray = (JsonArray) unEvento.get("Tags");
+                        if (tagsArray != null) {
+                            for (int e=0;e<tagsArray.size();e++){
+                                tagsAux.add(tagsArray.get(e).toString());
+                            }
+                        }
+                        even.setTags(tagsAux);
+                        even.setIdCalendar(unEvento.get("IdCalendar").getAsLong());
+                        eventos.add(even);
+
+                        ListaEventosFrag.add(even);
+
+                    }
+                    mAdapter = new EventoAdapter(eventos, getApplicationContext(), db);
+
+                }
+            }catch(Exception error){
+                Log.d("Conexion api", "Problema al conectar: "+ error.getMessage());
+            } finally {
+                if(miConexion!=null)
+                {
+                    miConexion.disconnect();
+                }
+            }
+            return strResultado;
+        }
+
+        @Override
+        protected void onPostExecute(String resultado){
+            super.onPostExecute(resultado);
+            Log.d("Conexion api", "Fin del traer eventos");
+        }
+    }
+
     private void obtenerListaRecursos(){
         db.collection("usuarios").document(User.getId()).collection("Complementos").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -291,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                         Recurso unRecurso = document.toObject(Recurso.class);
                         Recurso miRecurso=new Recurso();
                         miRecurso.setId(document.getId());
-                        miRecurso.setNombre(document.getString("Nombre"));
+                        miRecurso.setNombre(document.getString("nombre"));
                         ListaRecursos.add(miRecurso);
                     }
                 }
@@ -310,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
                     for (DocumentSnapshot document : snapshots) {
                         com.informatica.tutorialfirebase.Tag unTag = document.toObject(com.informatica.tutorialfirebase.Tag.class);
                         unTag.setId(document.getId());
-                        unTag.setNombre(document.getString("Nombre"));
+                        unTag.setNombre(document.getString("nombre"));
                         ListaTags.add(unTag);
                     }
                 }
@@ -355,47 +468,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            Log.d("ActivityResult", "Llego " + requestCode + " " + resultCode);
-
-            if(frag.equals("def"))
-            {
-                if(resultCode == Activity.RESULT_OK){
-                    miFragDeResultadoDef.Refrescar();
-                }
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    //Write your code if there's no result
-                    miFragDeResultadoDef.Refrescar();
-                }
-            }
-            else
-            {
-                if(resultCode == Activity.RESULT_OK){
-                    miFragDeResultadoIndef.Refrescar();
-                }
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    //Write your code if there's no result
-                    miFragDeResultadoIndef.Refrescar();
-                }
-            }
-
-        }
-        else if(requestCode == 2)
-        {
-            if(resultCode == Activity.RESULT_OK){
-                miFragDeResultado.Refrescar();
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-                miFragDeResultado.Refrescar();
-            }
-        }
-
-    }//onActivityResult
 
 }
