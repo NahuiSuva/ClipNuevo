@@ -21,6 +21,8 @@ public class fragMostrarEventosAValorar extends Fragment implements View.OnClick
     ArrayList<Evento> listaTraida;
     ArrayList<Evento> listaAMostrar;
     String IdUsuario;
+    EventoValoracionesAdapter miAdaptadorDeEventos;
+
 
     @Nullable
     @Override
@@ -54,8 +56,7 @@ public class fragMostrarEventosAValorar extends Fragment implements View.OnClick
 
         listaEventosMostrar.setLayoutManager(new LinearLayoutManager(miActividad.getApplicationContext()));
 
-        EventoValoracionesAdapter miAdaptadorDeEventos;
-        miAdaptadorDeEventos = new EventoValoracionesAdapter(listaAMostrar, miActividad.getApplicationContext(), db, IdUsuario);
+        miAdaptadorDeEventos = new EventoValoracionesAdapter(listaAMostrar, miActividad, db, IdUsuario);
 
         listaEventosMostrar.setAdapter(miAdaptadorDeEventos);
 
@@ -65,5 +66,25 @@ public class fragMostrarEventosAValorar extends Fragment implements View.OnClick
 
     public void onClick(View VistRecibida) {
 
+    }
+
+    public void Refrescar()
+    {
+        listaAMostrar.clear();
+
+        MainActivity miActividad=(MainActivity) getActivity();
+        listaTraida = miActividad.obtenerListaDeEventos();
+
+        for (int i=0; i<listaTraida.size();i++)
+        {
+            if(listaTraida.get(i).getCompletado() == true) {
+
+                if (listaTraida.get(i).getValorado() == false) {
+                    listaAMostrar.add(listaTraida.get(i));
+                }
+            }
+        }
+
+        miAdaptadorDeEventos.notifyDataSetChanged();
     }
 }

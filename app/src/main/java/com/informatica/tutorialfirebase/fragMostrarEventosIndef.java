@@ -23,6 +23,7 @@ public class fragMostrarEventosIndef extends Fragment implements View.OnClickLis
     ArrayList<Recurso> listaAMostrarRecursos;
     ArrayList<Tag> listaAMostrarTags;
     String IdUsuario;
+    EventoAdapter miAdaptadorDeEventos;
 
     @Nullable
     @Override
@@ -64,16 +65,37 @@ public class fragMostrarEventosIndef extends Fragment implements View.OnClickLis
 
         listaEventosMostrar.setLayoutManager(new LinearLayoutManager(miActividad.getApplicationContext()));
 
-        EventoAdapter miAdaptadorDeEventos;
-        miAdaptadorDeEventos = new EventoAdapter(listaAMostrar, miActividad.getApplicationContext(), db, listaAMostrarRecursos, listaAMostrarTags, IdUsuario);
+        miAdaptadorDeEventos = new EventoAdapter(listaAMostrar, miActividad, db, listaAMostrarRecursos, listaAMostrarTags, IdUsuario);
 
         listaEventosMostrar.setAdapter(miAdaptadorDeEventos);
 
         return VistaADevolver;
     }
 
-
     public void onClick(View VistRecibida) {
 
+    }
+
+    public void Refrescar()
+    {
+        listaAMostrar.clear();
+
+        MainActivity miActividad=(MainActivity) getActivity();
+        listaTraida = miActividad.obtenerListaDeEventos();
+
+        for (int i=0; i<listaTraida.size();i++)
+        {
+            if(listaTraida.get(i).getCompletado() == false) {
+
+                if (listaTraida.get(i).getIndefinido() == true) {
+
+                    if (listaTraida.get(i).getValorado() == false) {
+                        listaAMostrar.add(listaTraida.get(i));
+                    }
+                }
+            }
+        }
+
+        miAdaptadorDeEventos.notifyDataSetChanged();
     }
 }

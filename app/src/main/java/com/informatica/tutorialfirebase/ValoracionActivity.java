@@ -3,6 +3,7 @@ package com.informatica.tutorialfirebase;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -51,15 +52,15 @@ public class ValoracionActivity extends AppCompatActivity {
 
         IdUsuario = getIntent().getExtras().getString("IdUsuario");
 
-        final SmileRating rating = findViewById(R.id.smile_rating);
-        swFecha = findViewById(R.id.swFechaV);
-        swHora = findViewById(R.id.swHoraV);
-        swDuracion = findViewById(R.id.swDuracionV);
-        swComplementos = findViewById(R.id.swComplementosV);
-        swTags = findViewById(R.id.swTagsV);
+            final SmileRating rating = findViewById(R.id.smile_rating);
+            swFecha = findViewById(R.id.swFechaV);
+            swHora = findViewById(R.id.swHoraV);
+            swDuracion = findViewById(R.id.swDuracionV);
+            swComplementos = findViewById(R.id.swComplementosV);
+            swTags = findViewById(R.id.swTagsV);
 
         rating.setOnSmileySelectionListener(new SmileRating.OnSmileySelectionListener() {
-            @Override
+                @Override
             public void onSmileySelected(@BaseRating.Smiley int smiley, boolean reselected) {
 
                 // Retrieve the value of the bar dinamically
@@ -89,6 +90,10 @@ public class ValoracionActivity extends AppCompatActivity {
 
         ActualizarEvento(idEvento, bundle.getString("titulo"), bundle.getString("fecha"), bundle.getInt("duracion"), bundle.getString("hora"), bundle.getInt("importancia"), bundle.getStringArrayList("complementos"), bundle.getStringArrayList("tags"), bundle.getBoolean("lluvia"), bundle.getBoolean("indefinido"), bundle.getBoolean("completado"), true, bundle.getLong("IdCalendar"));
 
+        Log.d("ActivityResult", "Volvio");
+
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
 
