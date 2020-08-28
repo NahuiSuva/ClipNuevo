@@ -87,7 +87,16 @@ public class EventoValoracionesAdapter extends RecyclerView.Adapter<EventoValora
         even = eventos.get(itemPosition);
        // progressBar.setVisibility(View.GONE);
         holder.titulo.setText(even.getTitulo());
-        holder.fecha.setText(even.getFecha());
+        Boolean indefinidoComp;
+        indefinidoComp = even.getIndefinido();
+        if(indefinidoComp == true)
+        {
+            holder.fecha.setText("Indefinido");
+        }
+        else
+        {
+            holder.fecha.setText(even.getFecha());
+        }
         //holder.duracion.setText(Integer.toString(even.getDuracion()));
         holder.completado.setChecked(true);
         holder.itemView.setOnClickListener(v ->
