@@ -40,7 +40,7 @@
                 android:layout_marginEnd="30dp"
               android:scaleX="2"
               android:scaleY="2"
-              android:buttonTint="@color/colorPrimaryDiscret"/>
+              android:buttonTint="@color/colorPrimaryDiscret" />
         </LinearLayout>
 
 
@@ -74,6 +74,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="6 (seis)" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/Asignar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/primary_rounded_button"
+                android:buttonTint="@color/colorPrimaryDiscret"
+                android:drawableTint="@color/colorWhite"
+                android:text="Asignar"
+                android:textColor="@color/colorWhite"
+                android:visibility="gone" />
         </LinearLayout>
 
         <!--LinearLayout

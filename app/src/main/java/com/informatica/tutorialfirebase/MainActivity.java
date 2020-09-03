@@ -513,5 +513,4 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }//onActivityResult
-
 }

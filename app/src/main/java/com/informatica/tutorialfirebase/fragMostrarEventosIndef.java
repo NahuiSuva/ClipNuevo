@@ -2,14 +2,17 @@ package com.informatica.tutorialfirebase;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.escape.Escaper;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;

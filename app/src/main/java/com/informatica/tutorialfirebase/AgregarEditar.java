@@ -249,35 +249,21 @@ public class AgregarEditar extends AppCompatActivity {
         abrirDuracion = findViewById(R.id.btnDuracion);
     }
 
-    protected View.OnClickListener btnAgregar_Click =  new View.OnClickListener() {
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        public void onClick(View v) {
+    public void Recomendar (View v, int cantAdv){
+        AlertDialog recomendarDialog;
+        AlertDialog.Builder recomendacion;
+        minutoDuracion = tpDuracion.getMinute();
+        horaDuracion = tpDuracion.getHour();
+        duracion = (horaDuracion * 60) + minutoDuracion;
 
-                cont = 0;
-                int cantAdv = 0;
+        recomendacion = new AlertDialog.Builder(v.getContext());
 
-                if (edtTitulo.length() == 0) {
-                    if (cantAdv == 0) {
-                        Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    titulo = edtTitulo.getText().toString();
-                    cont++;
+        DialogInterface.OnClickListener escuchador = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == -1){
+                    duracion = 60;
                 }
-
-                year = dpFecha.getYear();
-                month = dpFecha.getMonth();
-                day = dpFecha.getDayOfMonth();
-                fecha = day + "/" + (month + 1) + "/" + year;
-
-                minutoDuracion = tpDuracion.getMinute();
-                horaDuracion = tpDuracion.getHour();
-                duracion = (horaDuracion * 60) + minutoDuracion;
-                minuto = tpHora.getMinute();
-                hora1 = tpHora.getHour();
-                hora = hora1 + ":" + minuto;
-
                 if (rd1.isChecked() == false && rd2.isChecked() == false && rd3.isChecked() == false) {
                     if (cantAdv == 0) {
                         Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
@@ -326,10 +312,51 @@ public class AgregarEditar extends AppCompatActivity {
 
                     Log.d("ActivityResult", "Volvio");
 
-                Intent returnIntent = new Intent();
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
+                    Intent returnIntent = new Intent();
+                    setResult(Activity.RESULT_CANCELED, returnIntent);
+                    finish();
+                }
             }
+        };
+        if(duracion > 60){
+            recomendacion.setTitle("Recomendación");
+            recomendacion.setMessage("Anteriormente no lograste completar tareas con esta duración. ¿Te gustaría cambiarla a 60 minutos?");
+            recomendacion.setPositiveButton("Cambiar", escuchador);
+            recomendacion.setNegativeButton("No", escuchador);
+            recomendarDialog=recomendacion.create();
+            recomendarDialog.show();
+        }
+    }
+
+    protected View.OnClickListener btnAgregar_Click =  new View.OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onClick(View v) {
+            cont = 0;
+            int cantAdv = 0;
+
+            if (edtTitulo.length() == 0) {
+                if (cantAdv == 0) {
+                    Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                titulo = edtTitulo.getText().toString();
+                cont++;
+            }
+
+            year = dpFecha.getYear();
+            month = dpFecha.getMonth();
+            day = dpFecha.getDayOfMonth();
+            fecha = day + "/" + (month + 1) + "/" + year;
+
+            minutoDuracion = tpDuracion.getMinute();
+            horaDuracion = tpDuracion.getHour();
+            duracion = (horaDuracion * 60) + minutoDuracion;
+            minuto = tpHora.getMinute();
+            hora1 = tpHora.getHour();
+            hora = hora1 + ":" + minuto;
+
+            Recomendar(v, cantAdv);
         }
     };
 
@@ -410,7 +437,7 @@ public class AgregarEditar extends AppCompatActivity {
     }
 
     private void ActualizarEvento(String id, String titulo, String fecha, int duracion, String hora, int importancia, ArrayList<String> complementos, ArrayList<String> tags, Boolean lluvia, Boolean indefinido, Boolean completado, Boolean valorado, long idCalendarModificar) {
-        //modificarGoogle(idCalendarModificar);
+        modificarGoogle(idCalendarModificar);
 
         Map<String, Object> evento = (new Evento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendarModificar)).toMap();
 
@@ -504,6 +531,44 @@ public class AgregarEditar extends AppCompatActivity {
          Log.d("Calendario", "El Id del evento creado es: " + eventoID);
     }
 
+    /*private void modificarGoogle(long eventID){
+        ContentResolver cr = getContentResolver();
+        Uri uri = CalendarContract.Events.CONTENT_URI;
+        StringBuilder sb = new StringBuilder();
+        int updatedCount = 0;
+
+        long startMillis = 0;
+        long endMillis = 0;
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(year,month, day, hora1, minuto);
+        startMillis = beginTime.getTimeInMillis();
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(year,month, day, hora1+horaDuracion, minuto+minutoDuracion);
+        endMillis = endTime.getTimeInMillis();
+
+        ContentValues values = new ContentValues();
+      values.put(CalendarContract.Events.CALENDAR_ID, IdCalendar);
+        values.put(CalendarContract.Events.DTSTART, startMillis);
+        values.put(CalendarContract.Events.DTEND, endMillis);
+        values.put(CalendarContract.Events.TITLE, titulo);
+        values.put(CalendarContract.Events.STATUS, 1);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Argentina/Buenos_Aires");
+
+        String selection = "(" + CalendarContract.Events._ID + " = ?)";
+        String[] selectionArgs = new String[]{String.valueOf(eventID)};
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if(PackageManager.PERMISSION_GRANTED == checkSelfPermission("android.permission.WRITE_CALENDAR")){
+                updatedCount = cr.update(uri, values, selection, selectionArgs);
+            }else{
+                Log.d("Calendario", "No hay permiso para editar el calendario");
+            }
+        }else{
+            updatedCount = cr.update(uri, values, selection, selectionArgs);
+            Log.d("Calendario", "Cantidad de lineas actualizadas: " + updatedCount);
+        }
+    }*/
+
     private void modificarGoogle(long idEvent){
         long startMillis = 0;
         long endMillis = 0;
@@ -518,7 +583,6 @@ public class AgregarEditar extends AppCompatActivity {
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
         Uri updateUri = null;
-        // Campos a modificar
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
         values.put(CalendarContract.Events.TITLE, titulo);
@@ -532,7 +596,6 @@ public class AgregarEditar extends AppCompatActivity {
         }catch(Exception error){
             Log.d("Calendario", "No se pudo actualizar: " + error);
         }
-
     }
 
     private void eliminarGoogle(long idEvent){

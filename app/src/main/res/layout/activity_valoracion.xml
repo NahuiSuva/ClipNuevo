@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ValoracionActivity">
+    tools:context=".ValoracionActivity"
+    style="@style/AppTheme"
+    android:theme="@style/AppTheme.NoActionBar">
 
-    <TextView
+    <!--<TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Valorar el evento"
+        android:text="Valoraciones"
         android:background="@drawable/semirounded_background"
         android:textAlignment="textStart"
         android:textSize="18dp"
@@ -19,7 +21,7 @@
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        />-->
 
     <!--RatingBar
         android:id="@+id/rating"
@@ -38,6 +40,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" /-->
 
+    <TextView
+        android:id="@+id/preg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Cómo estuvo el evento en general?"
+        app:layout_constraintBottom_toTopOf="@+id/smile_rating"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        />
     <com.hsalf.smilerating.SmileRating
         android:id="@+id/smile_rating"
         android:layout_width="match_parent"
@@ -45,133 +62,161 @@
         app:showLine="true"
         app:textNonSelectionColor="@color/colorWhite"
         app:textSelectionColor="@color/colorWhite"
-        android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/swFechaV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/preg" />
+
+    <TextView
+        android:id="@+id/preg2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿Qué elementos funcionaron?"
+        app:layout_constraintBottom_toTopOf="@+id/Fecha"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/smile_rating"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="24dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        />
 
     <TextView
         android:id="@+id/Fecha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Fecha"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/smile_rating" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/swFechaV"
+        app:layout_constraintTop_toTopOf="@+id/swFechaV"
+        android:layout_marginStart="2dp"/>
 
     <Switch
         android:id="@+id/swFechaV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/swHoraV"
-        app:layout_constraintTop_toTopOf="@+id/Fecha" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/preg2"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"/>
 
     <TextView
         android:id="@+id/Hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Hora"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Fecha" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/swHoraV"
+        app:layout_constraintTop_toTopOf="@+id/swHoraV"
+        android:layout_marginStart="2dp"/>
 
     <Switch
         android:id="@+id/swHoraV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/swDuracionV"
-        app:layout_constraintTop_toTopOf="@+id/Hora" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/swFechaV"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"/>
 
     <TextView
         android:id="@+id/Duracion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Duración"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Hora" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/swDuracionV"
+        app:layout_constraintTop_toTopOf="@+id/swDuracionV"
+        android:layout_marginStart="2dp"/>
 
     <Switch
         android:id="@+id/swDuracionV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/swComplementosV"
-        app:layout_constraintTop_toTopOf="@+id/Duracion" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/swHoraV"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"/>
 
     <TextView
         android:id="@+id/Complementos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Complementos"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Duracion" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/swComplementosV"
+        app:layout_constraintTop_toTopOf="@+id/swComplementosV"
+        android:layout_marginStart="2dp"/>
 
     <Switch
         android:id="@+id/swComplementosV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="45dp"
-        app:layout_constraintStart_toEndOf="@+id/Complementos"
-        app:layout_constraintTop_toTopOf="@+id/Complementos" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/swDuracionV"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"/>
 
     <TextView
         android:id="@+id/Tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
         android:text="Tags"
         android:textAlignment="viewStart"
         android:textColor="@color/colorBlack"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Complementos" />
+        android:textSize="18dp"
+        app:layout_constraintStart_toEndOf="@+id/swTagsV"
+        app:layout_constraintTop_toTopOf="@+id/swTagsV"
+        android:layout_marginStart="2dp"/>
 
     <Switch
         android:id="@+id/swTagsV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/swComplementosV"
-        app:layout_constraintTop_toTopOf="@+id/Tags" />
+        app:layout_constraintTop_toBottomOf="@+id/swComplementosV"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="12dp"/>
 
     <Button
         android:id="@+id/btnEnviarValoracion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="10dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/primary_rounded_button"
         android:text="Enviar valoración"
         android:textColor="@color/colorWhite"
-        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/swTagsV" />
+        app:layout_constraintTop_toBottomOf="@+id/swTagsV"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_goneMarginBottom="4dp"
+        android:textSize="18dp"
+        />
 
+    <TextView
+        app:layout_constraintTop_toBottomOf="@id/btnEnviarValoracion"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="padding bottom"
+        android:textSize="24dp"
+        android:visibility="invisible"
+        ></TextView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

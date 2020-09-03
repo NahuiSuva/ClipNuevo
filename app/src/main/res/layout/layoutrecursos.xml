@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         >
 
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -39,20 +37,29 @@
 
             <EditText
                 android:id="@+id/ingresoRecurso"
-                android:layout_width="wrap_content"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/lblTitulo"
-                app:layout_constraintStart_toStartOf="parent"
                 android:hint="Nuevo complemento"
-                android:layout_marginBottom="5dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblTitulo"
+                android:layout_marginStart="8dp"
+                />
 
             <Button
                 android:id="@+id/btnAgregarRecurso"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Agregar complemento"
+                android:text="Agregar"
                 app:layout_constraintTop_toBottomOf="@id/lblTitulo"
-                app:layout_constraintStart_toEndOf="@id/ingresoRecurso" />
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/primary_rounded_button"
+                android:textSize="16dp"
+                android:paddingEnd="24dp"
+                android:paddingStart="24dp"
+                android:textColor="@color/colorWhite"/>
 
 
             <androidx.recyclerview.widget.RecyclerView

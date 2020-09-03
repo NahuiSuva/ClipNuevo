@@ -3,17 +3,20 @@ package com.informatica.tutorialfirebase;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,7 +40,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
     ArrayList<Tag> ListaTags;
     String IdUsuario;
     private FirebaseFirestore db;
-
+    private String OpcionElegida;
 
     public EventoAdapter(List<Evento> eventos, Context context, FirebaseFirestore firestoreDB) {
         this.eventos = eventos;
@@ -72,6 +75,33 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
         if(indefinidoComp == true)
         {
             holder.fecha.setText("Indefinido");
+            holder.asignar.setVisibility(View.VISIBLE);
+            holder.asignar.setOnClickListener(v ->
+            {
+                AlertDialog.Builder mensaje;
+                mensaje = new AlertDialog.Builder(v.getContext());
+                mensaje.setTitle("Asignar fecha");
+                String[] opciones = {"14/9/2020", "16/9/2020", "21/9/2020"};
+                mensaje.setSingleChoiceItems(opciones, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("Asignar", "Elegí una opción");
+                        OpcionElegida = opciones[which];
+                    }
+                });
+                mensaje.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d("Asignar", "Tocó asignar");
+                        even.setFecha(OpcionElegida);
+                        even.setIndefinido(false);
+                        ActualizarEvento(even.getId(), even.getTitulo(), even.getFecha(), even.getDuracion(), even.getHora(), even.getImportancia(), even.getComplementos(), even.getTags(), even.getLluvia(), even.getIndefinido(),even.getCompletado(), even.getValorado(), even.getIdCalendar());
+                        //eventos.remove(even)
+                    }
+                });
+                mensaje.create();
+                mensaje.show();
+            });
         }
         else
         {
@@ -151,6 +181,8 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
         TextView fecha;
         @BindView(R.id.Duracion)
         TextView duracion;
+        @BindView(R.id.Asignar)
+        Button asignar;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -183,5 +215,4 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                     }
                 });
     }
-
 }
