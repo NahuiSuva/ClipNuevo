@@ -249,6 +249,60 @@ public class AgregarEditar extends AppCompatActivity {
         abrirDuracion = findViewById(R.id.btnDuracion);
     }
 
+    public void  Agregar(int cantAdv) {
+        if (rd1.isChecked() == false && rd2.isChecked() == false && rd3.isChecked() == false) {
+            if (cantAdv == 0) {
+                Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (rd1.isChecked()) {
+                importancia = 1;
+            } else if (rd2.isChecked()) {
+                importancia = 2;
+            } else {
+                importancia = 3;
+            }
+            cont++;
+        }
+
+        if (complementosSeleccionados.size() == 0) {
+            complementos = null;
+        } else {
+            for (int i = 0; i < complementosSeleccionados.size(); i++) {
+                complementos.add(complementosSeleccionados.get(i).getNombre());
+            }
+        }
+        if (tagsSeleccionados.size() == 0) {
+            tags = null;
+        } else {
+            for (int i = 0; i < tagsSeleccionados.size(); i++) {
+                tags.add(tagsSeleccionados.get(i).getNombre());
+            }
+        }
+
+        lluvia = swLluvia.isChecked();
+        indefinido = swIndefinido.isChecked();
+        completado = false;
+        valorado = false;
+
+
+        if (cont == 2) {
+            //Si no tengo un ID quiere decir que es un registro nuevo. Si tengo un ID debo actualizar el existente
+            if (id.length() > 0) {
+                ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendarModif);
+            } else {
+                AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
+            }
+            complementosSeleccionados.clear();
+            tagsSeleccionados.clear();
+
+            Log.d("ActivityResult", "Volvio");
+
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        }
+    }
     public void Recomendar (View v, int cantAdv){
         AlertDialog recomendarDialog;
         AlertDialog.Builder recomendacion;
@@ -264,59 +318,8 @@ public class AgregarEditar extends AppCompatActivity {
                 if(which == -1){
                     duracion = 60;
                 }
-                if (rd1.isChecked() == false && rd2.isChecked() == false && rd3.isChecked() == false) {
-                    if (cantAdv == 0) {
-                        Toast.makeText(getApplicationContext(), "Ingrese todos los campos de manera correcta", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if (rd1.isChecked()) {
-                        importancia = 1;
-                    } else if (rd2.isChecked()) {
-                        importancia = 2;
-                    } else {
-                        importancia = 3;
-                    }
-                    cont++;
+                Agregar(cantAdv);
                 }
-
-                if (complementosSeleccionados.size() == 0) {
-                    complementos = null;
-                } else {
-                    for (int i = 0; i < complementosSeleccionados.size(); i++) {
-                        complementos.add(complementosSeleccionados.get(i).getNombre());
-                    }
-                }
-                if (tagsSeleccionados.size() == 0) {
-                    tags = null;
-                } else {
-                    for (int i = 0; i < tagsSeleccionados.size(); i++) {
-                        tags.add(tagsSeleccionados.get(i).getNombre());
-                    }
-                }
-
-                lluvia = swLluvia.isChecked();
-                indefinido = swIndefinido.isChecked();
-                completado = false;
-                valorado = false;
-
-
-                if (cont == 2) {
-                    //Si no tengo un ID quiere decir que es un registro nuevo. Si tengo un ID debo actualizar el existente
-                    if (id.length() > 0) {
-                        ActualizarEvento(id, titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado, idCalendarModif);
-                    } else {
-                        AgregarEvento(titulo, fecha, duracion, hora, importancia, complementos, tags, lluvia, indefinido, completado, valorado);
-                    }
-                    complementosSeleccionados.clear();
-                    tagsSeleccionados.clear();
-
-                    Log.d("ActivityResult", "Volvio");
-
-                    Intent returnIntent = new Intent();
-                    setResult(Activity.RESULT_CANCELED, returnIntent);
-                    finish();
-                }
-            }
         };
         if(duracion > 60){
             recomendacion.setTitle("Recomendación");
@@ -325,6 +328,8 @@ public class AgregarEditar extends AppCompatActivity {
             recomendacion.setNegativeButton("No", escuchador);
             recomendarDialog=recomendacion.create();
             recomendarDialog.show();
+        }else{
+            Agregar(cantAdv);
         }
     }
 
