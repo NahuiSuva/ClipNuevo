@@ -96,7 +96,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                         even.setFecha(OpcionElegida);
                         even.setIndefinido(false);
                         ActualizarEvento(even.getId(), even.getTitulo(), even.getFecha(), even.getDuracion(), even.getHora(), even.getImportancia(), even.getComplementos(), even.getTags(), even.getLluvia(), even.getIndefinido(),even.getCompletado(), even.getValorado(), even.getIdCalendar());
-                        //eventos.remove(even)
+                        EligeFechaParaIndefinido(even);
                     }
                 });
                 mensaje.create();
@@ -214,5 +214,10 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                         Toast.makeText(context.getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void EligeFechaParaIndefinido(Evento evento){
+        eventos.remove(evento);
+        this.notifyDataSetChanged();
     }
 }
