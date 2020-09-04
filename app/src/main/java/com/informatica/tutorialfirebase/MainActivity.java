@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putSerializable("IndicadorActivity", indicadorActivity);
                 Intent intent = new Intent(MainActivity.this, AgregarEditar.class);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
         ButterKnife.bind(this);
@@ -248,8 +248,7 @@ public class MainActivity extends AppCompatActivity {
         TransaccionesDeFragment.commit();
 
     }
-
-
+    
     private void MostrarCalendario() {
         fragMostrarCalendario miFragDeResultado=new fragMostrarCalendario();
 
