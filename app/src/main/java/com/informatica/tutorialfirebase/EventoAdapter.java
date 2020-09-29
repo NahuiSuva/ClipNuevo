@@ -204,14 +204,14 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.ViewHolder
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(context.getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context.getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("AgregarEvent", "Error al actualizar el evento", e);
-                        Toast.makeText(context.getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context.getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

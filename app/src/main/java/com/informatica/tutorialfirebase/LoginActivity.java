@@ -1,7 +1,10 @@
 package com.informatica.tutorialfirebase;
 
 import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     int permisosCalendario = PackageManager.PERMISSION_GRANTED;
     GoogleSignInClient googleSignInClient;
     private FirebaseAuth firebaseAuth;
+    ProgressBar pBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
         signInButton = findViewById(R.id.sign_in_button);
-
+        pBar=findViewById(R.id.pBar);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,6 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
             TextView textoRequisito = findViewById(R.id.textoRequisito);
             textoRequisito.setText("Estamos preparando todo...");
+            pBar.setVisibility(View.VISIBLE);
             signInButton.setVisibility(View.GONE);
             //Log.d(TAG, "Currently Signed in: " + currentUser.getEmail());
             Mail=currentUser.getEmail();
@@ -233,8 +239,19 @@ public class LoginActivity extends AppCompatActivity {
             displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
             accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
             ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+            Account[] accounts = AccountManager.get(this).getAccounts();
+            String authority = CalendarContract.Calendars.CONTENT_URI.getAuthority();
+            for (int i = 0; i < accounts.length; i++) {
+
+                Log.d(TAG, "Refreshing calendars for: " + accounts[i]);
+
+                Bundle extras = new Bundle();
+                extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                ContentResolver.requestSync(accounts[i], authority, extras);
+            }
             Log.d("Calendario", "Id: "+ calID + "Nombre del display: " + displayName + " Nombre de la cuenta" + accountName + " Nombre del duenio: " + ownerName);
         }
+
     }
     public static final String[] EVENT_PROJECTION = new String[] {
                 CalendarContract.Calendars._ID,                           // 0

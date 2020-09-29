@@ -454,14 +454,14 @@ public class AgregarEditar extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e("AgregarEvent", "Error al actualizar el evento", e);
-                        Toast.makeText(getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
+                        //Log.e("AgregarEvent", "Error al actualizar el evento", e);
+                        //Toast.makeText(getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -481,18 +481,19 @@ public class AgregarEditar extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Evento agregado correctamente!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Evento agregado correctamente!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("AgregarEvent", "Error al añadir el evento", e);
-                        Toast.makeText(getApplicationContext(), "Ocurrio un error y no se pudo agregar el evento", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Ocurrio un error y no se pudo agregar el evento", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    //Agregar evento a Google Calendar
     private void AgregarAGoogle() {
         long calID = IdCalendar;
         Log.d("Calendario", "El ID es: " + calID);
@@ -574,6 +575,8 @@ public class AgregarEditar extends AppCompatActivity {
         }
     }*/
 
+
+    //Modificar evento de Google Calendar
     private void modificarGoogle(long idEvent){
         long startMillis = 0;
         long endMillis = 0;
@@ -588,6 +591,8 @@ public class AgregarEditar extends AppCompatActivity {
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
         Uri updateUri = null;
+        //values.put(CalendarContract.Calendars.SYNC_EVENTS, 1);
+        //values.put(CalendarContract.Calendars.VISIBLE, 1);
         values.put(CalendarContract.Events.DTSTART, startMillis);
         values.put(CalendarContract.Events.DTEND, endMillis);
         values.put(CalendarContract.Events.TITLE, titulo);
@@ -597,12 +602,17 @@ public class AgregarEditar extends AppCompatActivity {
         updateUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, idEvent);
         try {
             int rows = cr.update(updateUri, values, null, null);
+            /*cr.update(
+                    ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, idEvent),
+                    values, null, null);*/
+            //ContentResolver.requestSync();
             Log.d("Calendario", "Rows updated: " + rows);
         }catch(Exception error){
             Log.d("Calendario", "No se pudo actualizar: " + error);
         }
     }
 
+    //Eliminar evento de Google Calendar
     private void eliminarGoogle(long idEvent){
         long eventID = idEvent;
         ContentResolver cr = getContentResolver();
@@ -620,8 +630,8 @@ public class AgregarEditar extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        //eliminarGoogle(idCalendarModif);
-                        Toast.makeText(getApplicationContext(), "Evento borrado exitosamente!", Toast.LENGTH_SHORT).show();
+                        eliminarGoogle(idCalendarModif);
+                        //Toast.makeText(getApplicationContext(), "Evento borrado exitosamente!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -107,14 +107,14 @@ public class ValoracionActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Valoracion agregada correctamente!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Valoracion agregada correctamente!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("AgregarValoracion", "Error al añadir la valoracion", e);
-                        Toast.makeText(getApplicationContext(), "Ocurrio un error y no se pudo agregar la valoracion", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Ocurrio un error y no se pudo agregar la valoracion", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -130,14 +130,14 @@ public class ValoracionActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Evento actualizado correctamente!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("AgregarEvent", "Error al actualizar el evento", e);
-                        Toast.makeText(getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Ocurrió un error al actualizar la información", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

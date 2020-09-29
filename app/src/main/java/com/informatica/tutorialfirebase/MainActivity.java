@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         nav_View.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Toast.makeText(getApplicationContext(), menuItem.getTitle() + " seleccionado", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), menuItem.getTitle() + " seleccionado", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawers();
                 if(menuItem.getTitle().equals("Lista definida"))
                 {
