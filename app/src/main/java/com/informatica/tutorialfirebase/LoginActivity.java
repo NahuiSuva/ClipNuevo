@@ -3,6 +3,7 @@ package com.informatica.tutorialfirebase;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +36,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.gson.Gson;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     String Nombre = "";
     String Mail;
     long calID = 0;
+    SignInButton signInButton;
     int permisosCalendario = PackageManager.PERMISSION_GRANTED;
     GoogleSignInClient googleSignInClient;
     private FirebaseAuth firebaseAuth;
@@ -55,10 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+        signInButton = findViewById(R.id.sign_in_button);
 
-        verificarPermisos();
-
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +68,11 @@ public class LoginActivity extends AppCompatActivity {
                 signInToGoogle();
             }
         });
+
+
+        verificarPermisos();
+
+
         // Configure Google Client
         configureGoogleClient();
     }
@@ -93,10 +100,14 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            Log.d(TAG, "Currently Signed in: " + currentUser.getEmail());
+            TextView textoRequisito = findViewById(R.id.textoRequisito);
+            textoRequisito.setText("Estamos preparando todo...");
+            signInButton.setVisibility(View.GONE);
+            //Log.d(TAG, "Currently Signed in: " + currentUser.getEmail());
             Mail=currentUser.getEmail();
             vincularCalendario();
-            showToastMessage("Currently Logged in: " + currentUser.getEmail());
+            firebaseAuthWithGoogle(GoogleSignIn.getLastSignedInAccount(this));
+            //showToastMessage("Currently Logged in: " + currentUser.getEmail());
         }
     }
 
@@ -137,12 +148,12 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Log.d(TAG, "signInWithCredential:success: currentUser: " + user.getEmail());
-                            showToastMessage("Firebase Authentication Succeeded ");
+                            //showToastMessage("Firebase Authentication Succeeded ");
                             launchMainActivity(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            showToastMessage("Firebase Authentication failed:" + task.getException());
+                            //showToastMessage("Firebase Authentication failed:" + task.getException());
                         }
                     }
                 });
