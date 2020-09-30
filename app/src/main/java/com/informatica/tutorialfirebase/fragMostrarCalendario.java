@@ -54,7 +54,7 @@ public class fragMostrarCalendario extends Fragment implements View.OnClickListe
             @Override
             public void onSelectedDayChange(CalendarView view, int anio, int mes,
                                             int dia) {
-                //Toast.makeText(getContext(), ""+dia, 0).show();// TODO Auto-generated method stub
+                /*Toast.makeText(getContext(), ""+dia, 0).show();// TODO Auto-generated method stub*/
 
                 listaEventosMostrar=VistaADevolver.findViewById(R.id.lista_eventos);
                 db = FirebaseFirestore.getInstance();
