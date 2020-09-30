@@ -30,6 +30,8 @@ public class fragMostrarTags extends Fragment implements View.OnClickListener{
     Button btnAgregarComplemento;
     EditText txtNuevoTag;
     TagAdapter miAdaptadorDeTags;
+    MainActivity miActividadPrincipal;
+    com.google.android.material.floatingactionbutton.FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -39,6 +41,12 @@ public class fragMostrarTags extends Fragment implements View.OnClickListener{
         VistaADevolver=inflador.inflate(R.layout.layouttags, container, false);
         listaTags=new ArrayList<Tag>();
         listaTagsMostrar=VistaADevolver.findViewById(R.id.lista_tags);
+
+        miActividadPrincipal = (MainActivity) getActivity();
+
+        fab = miActividadPrincipal.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+
         MainActivity miActividad = (MainActivity) getActivity();
         listaTags=miActividad.obtenerListaDeTags();
         IdUsuario=miActividad.obtenerIdUsuario();

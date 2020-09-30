@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private fragMostrarEventosDef miFragDeResultadoDef;
     private fragMostrarEventosIndef miFragDeResultadoIndef;
     private fragMostrarEventosAValorar miFragDeResultado;
+    fragMostrarCalendario miFragDeResultadoCal;
 
     FragmentManager AdminFragments;
     FragmentTransaction TransaccionesDeFragment;
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
         AdminFragments=getFragmentManager();
 
-        MostrarCalendario();
-
         ListaEventosFrag = new ArrayList<Evento>();
+
+        SeIngresoElDatoCalendario(ListaEventosFrag);
 
         Toolbar toolbar1 = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolbar1);
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(menuItem.getTitle().equals("Calendario"))
                 {
-                    MostrarCalendario();
+                    SeIngresoElDatoCalendario(ListaEventosFrag);
                 }
                 else if(menuItem.getTitle().equals("Valoraciones"))
                 {
@@ -131,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(menuItem.getTitle().equals("Tags")){
                     MostrarResultadoTags();
+                }
+                else if(menuItem.getTitle().equals("Tiempo de sueño")){
+                    MostrarResultadoTiempoDeSueño();
                 }
                 return true;
             }
@@ -220,6 +224,14 @@ public class MainActivity extends AppCompatActivity {
         MostrarResultadoValoraciones();
     }
 
+    public void SeIngresoElDatoCalendario(ArrayList<Evento> listaEventos) {
+        Log.d("Frag", "Se ingresó dato en el Fragment");
+
+        _listaEventos = listaEventos;
+
+        MostrarCalendario();
+    }
+
     private void MostrarResultadoDefinido() {
         miFragDeResultadoDef=new fragMostrarEventosDef();
 
@@ -250,12 +262,13 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void MostrarCalendario() {
-        fragMostrarCalendario miFragDeResultado=new fragMostrarCalendario();
+        miFragDeResultadoCal=new fragMostrarCalendario();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
-        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultadoCal);
         TransaccionesDeFragment.commit();
 
+        frag = "calen";
     }
 
     private void MostrarResultadoRecursos(){
@@ -268,6 +281,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void MostrarResultadoTags(){
         fragMostrarTags miFragDeResultado=new fragMostrarTags();
+
+        TransaccionesDeFragment=AdminFragments.beginTransaction();
+        TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
+        TransaccionesDeFragment.commit();
+    }
+
+    private void MostrarResultadoTiempoDeSueño(){
+        fragMostrarTiempoDeSueño miFragDeResultado=new fragMostrarTiempoDeSueño();
 
         TransaccionesDeFragment=AdminFragments.beginTransaction();
         TransaccionesDeFragment.replace(R.id.FrameParaFragmentMostrar, miFragDeResultado);
@@ -488,7 +509,7 @@ public class MainActivity extends AppCompatActivity {
                     miFragDeResultadoDef.Refrescar();
                 }
             }
-            else
+            else if(frag.equals("indef"))
             {
                 if(resultCode == Activity.RESULT_OK){
                     miFragDeResultadoIndef.Refrescar();
@@ -496,6 +517,16 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_CANCELED) {
                     //Write your code if there's no result
                     miFragDeResultadoIndef.Refrescar();
+                }
+            }
+            else
+            {
+                if(resultCode == Activity.RESULT_OK){
+                    miFragDeResultadoCal.Refrescar();
+                }
+                if (resultCode == Activity.RESULT_CANCELED) {
+                    //Write your code if there's no result
+                    miFragDeResultadoCal.Refrescar();
                 }
             }
 

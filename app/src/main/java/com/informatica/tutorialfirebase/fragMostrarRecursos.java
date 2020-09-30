@@ -31,7 +31,7 @@ public class fragMostrarRecursos extends Fragment implements View.OnClickListene
     EditText txtNuevoComplemento;
     RecursoAdapter miAdaptadorDeRecursos;
     MainActivity miActividad;
-
+    com.google.android.material.floatingactionbutton.FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -39,6 +39,12 @@ public class fragMostrarRecursos extends Fragment implements View.OnClickListene
         View VistaADevolver;
         db=FirebaseFirestore.getInstance();
         VistaADevolver=inflador.inflate(R.layout.layoutrecursos, container, false);
+
+        miActividad = (MainActivity) getActivity();
+
+        fab = miActividad.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
+
         listaRecursos=new ArrayList<Recurso>();
         listaRecursosMostrar=VistaADevolver.findViewById(R.id.lista_recursos);
         miActividad = (MainActivity) getActivity();

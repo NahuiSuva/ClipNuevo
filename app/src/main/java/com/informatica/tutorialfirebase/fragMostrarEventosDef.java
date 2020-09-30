@@ -25,6 +25,8 @@ public class fragMostrarEventosDef extends Fragment implements View.OnClickListe
     ArrayList<Tag> listaAMostrarTags;
     String IdUsuario;
     EventoAdapter miAdaptadorDeEventos;
+    MainActivity miActividadPrincipal;
+    com.google.android.material.floatingactionbutton.FloatingActionButton fab;
 
     @Nullable
     @Override
@@ -35,6 +37,10 @@ public class fragMostrarEventosDef extends Fragment implements View.OnClickListe
 
         VistaADevolver=inflador.inflate(R.layout.layouteventosdefinidos, container, false);
 
+        miActividadPrincipal = (MainActivity) getActivity();
+
+        fab = miActividadPrincipal.findViewById(R.id.fab);
+        fab.setVisibility(View.VISIBLE);
 
         listaEventosMostrar=VistaADevolver.findViewById(R.id.lista_eventos);
 

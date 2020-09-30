@@ -210,7 +210,7 @@ public class AgregarEditar extends AppCompatActivity {
                 dia = Integer.parseInt(bundle.getString("fecha").substring(0, Inicio));
                 mes = Integer.parseInt(bundle.getString("fecha").substring(Inicio + 1, Fin));
                 anio = Integer.parseInt(bundle.getString("fecha").substring(Fin + 1, Fin + 5));
-                dpFecha.updateDate(anio, mes, dia);
+                dpFecha.updateDate(anio, (mes-1), dia);
                 tpDuracion.setMinute(bundle.getInt("minutos"));
                 tpDuracion.setHour(bundle.getInt("horas"));
                 int InicioHora = bundle.getString("hora").indexOf(":");
