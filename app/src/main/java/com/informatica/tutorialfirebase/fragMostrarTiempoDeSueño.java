@@ -38,7 +38,7 @@ public class fragMostrarTiempoDeSueño extends Fragment implements View.OnClickL
         VistaADevolver=inflador.inflate(R.layout.layouttiempodesuenio, container, false);
 
         tmpDuracion = VistaADevolver.findViewById(R.id.tmpDuracion);
-        tmpDuracion.setIs24HourView(true);
+        //tmpDuracion.setIs24HourView(true);
         tmpDuracion.setHour(0);
         tmpDuracion.setMinute(0);
 
